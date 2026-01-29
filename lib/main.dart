@@ -2,7 +2,7 @@
 
 import 'package:flutter/material.dart'; // Flutter 앱을 만드는 데 필요한 기본 도구들을 가져와요.
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:numerology/generated/l10n/app_localizations.dart';
 import 'package:numerology/locale_provider.dart';
 import 'package:numerology/screens/result_screen.dart'; // 계산 결과를 보여주는 화면 코드를 가져와요.
 import 'package:numerology/themes.dart'; // 앱의 색깔과 글씨 모양을 정하는 코드들을 가져와요.
