@@ -2,7 +2,7 @@
 // 앱을 만든 사람, 앱이 유용한 사람, 앱을 만든 이유 등 여러 정보를 보여주는 화면이에요.
 
 import 'package:flutter/material.dart'; // Flutter 앱의 기본 위젯들을 가져와요.
-import 'package:flutter_gen/gen_l10n/app_localizations.dart'; // 앱의 다국어 문자열을 가져와요.
+import 'package:numerology/generated/l10n/app_localizations.dart'; // 앱의 다국어 문자열을 가져와요.
 import '../widgets/info_card.dart'; // 정보 화면에 보이는 카드 모양 위젯을 가져와요.
 
 // 정보 화면을 보여주는 위젯이에요.

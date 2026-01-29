@@ -312,12 +312,7 @@ class NumerologyCalculator {
       return originalNumber.toString();
     }
 
-    // 경로가 3개 이상일 경우(예: 38 -> 11 -> 2), 첫 숫자를 제외하고 보여줍니다. (11/2)
-    if (path.length >= 3) {
-      return path.sublist(1).join('/');
-    }
-
-    // 경로가 2개일 경우(예: 23 -> 5), 전체 경로를 그대로 보여줍니다. (23/5)
+    // 모든 경로를 그대로 보여줍니다. (예: 38 -> 11 -> 2 일 때 "38/11/2")
     return path.join('/');
   }
 

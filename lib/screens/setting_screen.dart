@@ -4,7 +4,7 @@ import 'package:flutter/material.dart'; // Flutter 앱을 만드는 데 필요�
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:provider/provider.dart'; // 앱의 중요한 정보(테마 같은 것)를 여러 화면에서 함께 쓸 수 있게 도와주는 도구예요.
 import 'package:numerology/theme_provider.dart'; // 앱의 테마(밝은 모드, 어두운 모드)를 관리하는 특별한 도구를 가져와요.
-import 'package:flutter_gen/gen_l10n/app_localizations.dart'; // 앱의 다국어 문자열을 가져와요.
+import 'package:numerology/generated/l10n/app_localizations.dart'; // 앱의 다국어 문자열을 가져와요.
 import 'package:numerology/locale_provider.dart'; // 앱의 언어 설정을 관리하는 도구를 가져와요.
 import 'package:numerology/widgets/setting_card.dart'; // 설정 화면에 들어가는 한 줄짜리 카드를 만드는 위젯을 가져와요.
 import 'package:url_launcher/url_launcher.dart'; // 웹사이트나 이메일 앱을 열어주는 라이브러리예요.
@@ -63,7 +63,7 @@ class _SettingScreenState extends State<SettingScreen> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text(isKorean ? '커뮤니티로 이동' : 'Go to Community'),
+          title: Text(isKorean ? '블로그로 이동' : 'Go to Blog'),
           content: (_isNativeAdLoaded && _nativeAd != null)
               ? ConstrainedBox(
                   constraints: const BoxConstraints(
@@ -179,7 +179,7 @@ class _SettingScreenState extends State<SettingScreen> {
                   color: Colors.grey,
                 ),
                 onPressed: () {
-                  _showAdAndNavigate('https://cafe.naver.com/shootingstarter');
+                  _showAdAndNavigate('https://arion-ayin.github.io/');
                 },
               ),
             ),

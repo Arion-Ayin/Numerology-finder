@@ -34,21 +34,65 @@ class _SplashScreenState extends State<SplashScreen> {
   }
 
   Future<void> _initializeApp() async {
-    // 1. HistoryService에서 기록 데이터를 백그라운드에서 로드합니다.
-    await Provider.of<HistoryService>(context, listen: false).loadHistory();
+    // 스플래시 화면 시작 시간 기록
+    final startTime = DateTime.now();
 
-    // 2. 디버그 모드인지 확인합니다.
+    // 1. HistoryService에서 기록 데이터를 백그라운드에서 로드합니다.
+    // 타임아웃 설정: 최대 3초
+    try {
+      await Provider.of<HistoryService>(context, listen: false)
+          .loadHistory()
+          .timeout(
+            const Duration(seconds: 3),
+            onTimeout: () {
+              // 타임아웃 시 경고 출력 (릴리즈에서는 무시됨)
+              if (kDebugMode) {
+                print('히스토리 로딩 타임아웃 (3초 초과)');
+              }
+            },
+          );
+    } catch (e) {
+      if (kDebugMode) {
+        print('히스토리 로딩 실패: $e');
+      }
+    }
+
+    // 2. 디버그 모드에서도 스플래시 화면을 최소 2초 보여줍니다.
+    final adService = AdService();
+
     if (kDebugMode) {
-      // 디버그 모드일 경우: 광고를 건너뛰고 바로 메인 화면으로 이동
-      _navigateToMainScreen();
+      // 디버그 모드: 테스트 광고 ID 사용 + 2초 최소 대기
+      final elapsed = DateTime.now().difference(startTime);
+      final remainingTime = const Duration(seconds: 2) - elapsed;
+
+      if (remainingTime.inMilliseconds > 0) {
+        await Future.delayed(remainingTime);
+      }
+
+      // 테스트 광고 표시 (타임아웃 5초)
+      await adService.loadAndShowSplashAd(
+        adUnitId: 'ca-app-pub-3940256099942544/1033173712', // 테스트 광고 ID
+        onAdDismissed: _navigateToMainScreen,
+        onAdFailed: _navigateToMainScreen,
+        timeout: const Duration(seconds: 5), // 광고 로딩 타임아웃
+      );
     } else {
-      // 출시 모드일 경우: 스플래시 전면 광고를 로드하고 표시
-      final adService = AdService();
+      // 출시 모드: 실제 광고 ID 사용 (타임아웃 5초)
       await adService.loadAndShowSplashAd(
         adUnitId: 'ca-app-pub-7332476431820224/9337504089',
-        onAdDismissed: _navigateToMainScreen, // 광고가 닫히면 메인으로 이동
-        onAdFailed: _navigateToMainScreen, // 광고 실패 시에도 메인으로 이동
+        onAdDismissed: _navigateToMainScreen,
+        onAdFailed: _navigateToMainScreen,
+        timeout: const Duration(seconds: 5), // 광고 로딩 타임아웃
       );
+    }
+
+    // 전체 스플래시 화면 최대 시간 제한 (6초)
+    final totalElapsed = DateTime.now().difference(startTime);
+    if (totalElapsed.inSeconds > 6) {
+      if (kDebugMode) {
+        print('스플래시 화면 최대 시간 초과 (10초), 강제 이동');
+      }
+      _navigateToMainScreen();
     }
   }
 

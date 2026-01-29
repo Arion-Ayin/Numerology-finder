@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:numerology/numerology_calc.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:numerology/generated/l10n/app_localizations.dart';
 
 class ResultScreen extends StatelessWidget {
   final String name;

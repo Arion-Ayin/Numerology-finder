@@ -63,6 +63,7 @@ class AdService {
     required String adUnitId,
     required Function onAdDismissed,
     required Function onAdFailed,
+    Duration timeout = const Duration(seconds: 5), // 기본 타임아웃 5초
   }) async {
     final prefs = await SharedPreferences.getInstance();
     final lastAdShowTimeMillis = prefs.getInt(_lastSplashAdShowTimeKey) ?? 0;
@@ -77,11 +78,21 @@ class AdService {
     }
 
     InterstitialAd? splashAd;
+    bool adLoaded = false;
+
+    // 타임아웃 처리
+    Future.delayed(timeout, () {
+      if (!adLoaded) {
+        onAdFailed(); // 타임아웃 시 실패 콜백 실행
+      }
+    });
+
     await InterstitialAd.load(
       adUnitId: adUnitId,
       request: const AdRequest(),
       adLoadCallback: InterstitialAdLoadCallback(
         onAdLoaded: (ad) async {
+          adLoaded = true;
           // 광고가 성공적으로 로드되면, 현재 시간을 저장
           await prefs.setInt(_lastSplashAdShowTimeKey, currentTimeMillis);
           splashAd = ad;
@@ -98,6 +109,7 @@ class AdService {
           splashAd!.show(); // 광고 표시
         },
         onAdFailedToLoad: (error) {
+          adLoaded = true;
           onAdFailed(); // 광고 로드에 실패하면 콜백 실행
         },
       ),
