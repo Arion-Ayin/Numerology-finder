@@ -60,10 +60,17 @@ android {
         }
     }
 
-    // Enable 16KB page size support
+    // Packaging options for native libraries
     packaging {
         jniLibs {
             useLegacyPackaging = false
+        }
+    }
+
+    // Ensure native libraries are properly aligned for 16KB page size
+    splits {
+        abi {
+            isEnable = false
         }
     }
 
