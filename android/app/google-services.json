@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "1045499045071",
+    "project_id": "n-project-ca242",
+    "storage_bucket": "n-project-ca242.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1045499045071:android:63366d59c98e9d5b7803ba",
+        "android_client_info": {
+          "package_name": "com.numerology.finderapp"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDT16LkZHyRrdrhw7ZRVtG88sm8zTLAzx4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
