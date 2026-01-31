@@ -5,10 +5,11 @@ import 'package:numerology/screens/info_screen.dart';
 import 'package:numerology/screens/setting_screen.dart';
 import 'package:provider/provider.dart';
 import 'package:upgrader/upgrader.dart';
+import 'package:numerology/ads/ad_ids.dart';
 
 class CustomAppScreen extends StatefulWidget {
   final Widget body;
-  final Future<bool> Function()? onWillPop;
+  final Future<bool> Function(BuildContext)? onWillPop;
 
   const CustomAppScreen({
     super.key,
@@ -62,7 +63,7 @@ class _CustomAppScreenState extends State<CustomAppScreen> {
 
   void _loadBannerAd() {
     _bannerAd = BannerAd(
-      adUnitId: 'ca-app-pub-7332476431820224/7832850720', // 실제 광고 ID
+      adUnitId: AdIds.bannerAdUnitId,
       size: AdSize.banner,
       request: const AdRequest(),
       listener: BannerAdListener(
@@ -112,7 +113,7 @@ class _CustomAppScreenState extends State<CustomAppScreen> {
       
       showIgnore: true, // 'Ignore' 버튼은 계속 표시합니다.
       child: WillPopScope(
-        onWillPop: widget.onWillPop,
+        onWillPop: widget.onWillPop != null ? () => widget.onWillPop!(context) : null,
         child: Scaffold(
           appBar: AppBar(
             title: Row(
