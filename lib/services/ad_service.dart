@@ -1,5 +1,6 @@
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:numerology/ads/ad_ids.dart';
 
 /// 전면 광고 및 광고 정책을 관리하는 서비스 클래스입니다.
 class AdService {
@@ -19,7 +20,7 @@ class AdService {
   /// 전면 광고를 로드합니다.
   void _loadInterstitialAd() {
     InterstitialAd.load( // 이전에 설정된 일반 전면 광고 로드
-      adUnitId: 'ca-app-pub-7332476431820224/9337504089', // 실제 광고 ID
+      adUnitId: AdIds.interstitialAdUnitId,
       request: const AdRequest(),
       adLoadCallback: InterstitialAdLoadCallback(
         onAdLoaded: (ad) {
@@ -60,7 +61,6 @@ class AdService {
 
   /// 스플래시 화면에서 사용할 전면 광고를 로드하고 표시합니다.
   Future<void> loadAndShowSplashAd({
-    required String adUnitId,
     required Function onAdDismissed,
     required Function onAdFailed,
     Duration timeout = const Duration(seconds: 5), // 기본 타임아웃 5초
@@ -88,7 +88,7 @@ class AdService {
     });
 
     await InterstitialAd.load(
-      adUnitId: adUnitId,
+      adUnitId: AdIds.interstitialAdUnitId,
       request: const AdRequest(),
       adLoadCallback: InterstitialAdLoadCallback(
         onAdLoaded: (ad) async {

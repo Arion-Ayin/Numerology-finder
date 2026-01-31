@@ -14,7 +14,6 @@ dependencies:
   flutter_localizations:
     sdk: flutter
   ffi: ^2.1.0
-  sweph: ^2.10.3
   another_flushbar: ^1.2.2
   animated_theme_switcher: ^2.0.10
   provider: ^6.1.2

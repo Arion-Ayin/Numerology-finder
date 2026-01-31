@@ -8,6 +8,7 @@ import 'package:numerology/generated/l10n/app_localizations.dart'; // 앱의 다
 import 'package:numerology/locale_provider.dart'; // 앱의 언어 설정을 관리하는 도구를 가져와요.
 import 'package:numerology/widgets/setting_card.dart'; // 설정 화면에 들어가는 한 줄짜리 카드를 만드는 위젯을 가져와요.
 import 'package:url_launcher/url_launcher.dart'; // 웹사이트나 이메일 앱을 열어주는 라이브러리예요.
+import 'package:numerology/ads/ad_ids.dart';
 
 // '설정' 화면을 보여주는 위젯이에요.
 class SettingScreen extends StatefulWidget {
@@ -20,7 +21,6 @@ class SettingScreen extends StatefulWidget {
 class _SettingScreenState extends State<SettingScreen> {
   NativeAd? _nativeAd;
   bool _isNativeAdLoaded = false;
-  final String _nativeAdUnitId = 'ca-app-pub-7332476431820224/5792684086';
 
   @override
   void initState() {
@@ -36,7 +36,7 @@ class _SettingScreenState extends State<SettingScreen> {
 
   void _loadNativeAd() {
     _nativeAd = NativeAd(
-      adUnitId: _nativeAdUnitId,
+      adUnitId: AdIds.nativeAdUnitId,
       request: const AdRequest(),
       listener: NativeAdListener(
         onAdLoaded: (Ad ad) {

@@ -13,6 +13,7 @@ import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:numerology/services/ad_service.dart';
 import 'package:numerology/services/history_service.dart';
 import 'package:numerology/screens/splash_screen.dart'; // 스플래시 화면 임포트
+import 'package:numerology/ads/ad_ids.dart';
 
 import 'package:flutter/services.dart';
 import 'package:in_app_review/in_app_review.dart';
@@ -111,7 +112,6 @@ class _InputScreenState extends State<InputScreen> {
   // 네이티브 광고
   NativeAd? _nativeAd;
   bool _isNativeAdLoaded = false;
-  final String _nativeAdUnitId = 'ca-app-pub-7332476431820224/5792684086';
 
   // 이 화면이 처음 만들어질 때 딱 한 번 실행되는 부분이에요.
   @override
@@ -128,7 +128,7 @@ class _InputScreenState extends State<InputScreen> {
 
   void _loadNativeAd() {
     _nativeAd = NativeAd(
-      adUnitId: _nativeAdUnitId,
+      adUnitId: AdIds.nativeAdUnitId,
       request: const AdRequest(),
       listener: NativeAdListener(
         onAdLoaded: (Ad ad) {
@@ -249,7 +249,8 @@ class _InputScreenState extends State<InputScreen> {
   }
 
   // 뒤로가기 버튼을 처리하는 함수
-  Future<bool> _onWillPop() async {
+  Future<bool> _onWillPop(BuildContext context) async {
+     print('_onWillPop called'); 
     if (_showResults) {
       setState(() {
         _showResults = false;
