@@ -112,8 +112,14 @@ class _CustomAppScreenState extends State<CustomAppScreen> {
       showLater: false, 
       
       showIgnore: true, // 'Ignore' 버튼은 계속 표시합니다.
-      child: WillPopScope(
-        onWillPop: widget.onWillPop != null ? () => widget.onWillPop!(context) : null,
+      child: PopScope(
+        canPop: false,
+        onPopInvokedWithResult: (didPop, result) async {
+          if (didPop) return;
+          if (widget.onWillPop != null) {
+            await widget.onWillPop!(context);
+          }
+        },
         child: Scaffold(
           appBar: AppBar(
             title: Row(

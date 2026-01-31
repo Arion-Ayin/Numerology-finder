@@ -1,5 +1,3 @@
-// 이 파일은 앱의 가장 중요한 부분이에요. 앱이 어떻게 시작되고, 어떤 화면들을 보여줄지 정해요.
-
 import 'package:flutter/material.dart'; // Flutter 앱을 만드는 데 필요한 기본 도구들을 가져와요.
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:numerology/generated/l10n/app_localizations.dart';
@@ -14,13 +12,14 @@ import 'package:numerology/services/ad_service.dart';
 import 'package:numerology/services/history_service.dart';
 import 'package:numerology/screens/splash_screen.dart'; // 스플래시 화면 임포트
 import 'package:numerology/ads/ad_ids.dart';
-
 import 'package:flutter/services.dart';
 import 'package:in_app_review/in_app_review.dart';
+import 'package:firebase_core/firebase_core.dart';
 
 // 앱이 처음 시작될 때 가장 먼저 실행되는 부분이에요.
-void main() {
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
   MobileAds.instance.initialize();
   // 앱을 화면에 보여줘요.
   runApp(
