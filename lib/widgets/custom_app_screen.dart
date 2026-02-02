@@ -124,25 +124,28 @@ class _CustomAppScreenState extends State<CustomAppScreen> {
           appBar: AppBar(
             title: Row(
               children: [
-                Icon(
-                  _appBarOptions[_selectedIndex]['icon'] as IconData,
-                  color: Theme.of(context).colorScheme.primary,
-                  size: 24,
+                Container(
+                  padding: const EdgeInsets.all(8),
+                  decoration: BoxDecoration(
+                    color: Theme.of(context).colorScheme.secondary.withValues(alpha: 0.15),
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  child: Icon(
+                    _appBarOptions[_selectedIndex]['icon'] as IconData,
+                    color: Theme.of(context).colorScheme.secondary,
+                    size: 20,
+                  ),
                 ),
-                const SizedBox(width: 8),
+                const SizedBox(width: 12),
                 Text(
                   _appBarOptions[_selectedIndex]['title'] as String,
-                  style: TextStyle(
-                    color: Theme.of(context).brightness == Brightness.dark
-                        ? Colors.white
-                        : Colors.black87,
-                  ),
+                  style: Theme.of(context).appBarTheme.titleTextStyle,
                 ),
               ],
             ),
             backgroundColor: Theme.of(context).appBarTheme.backgroundColor,
             foregroundColor: Theme.of(context).appBarTheme.foregroundColor,
-            elevation: Theme.of(context).appBarTheme.elevation,
+            elevation: 0,
           ),
           body: Column(
             children: [
@@ -155,7 +158,7 @@ class _CustomAppScreenState extends State<CustomAppScreen> {
                       begin: Alignment.topCenter,
                       end: Alignment.bottomCenter,
                       colors: [
-                        Theme.of(context).colorScheme.background,
+                        Theme.of(context).scaffoldBackgroundColor,
                         Theme.of(context).colorScheme.surface,
                       ],
                     ),
@@ -173,26 +176,45 @@ class _CustomAppScreenState extends State<CustomAppScreen> {
                 ),
             ],
           ),
-          bottomNavigationBar: BottomNavigationBar(
-            items: const <BottomNavigationBarItem>[
-              BottomNavigationBarItem(
-                icon: Icon(Icons.home),
-                label: '홈',
-              ),
-              BottomNavigationBarItem(
-                icon: Icon(Icons.settings),
-                label: '세팅',
-              ),
-              BottomNavigationBarItem(
-                icon: Icon(Icons.info_outline),
-                label: '인포',
-              ),
-            ],
-            currentIndex: _selectedIndex,
-            onTap: _onItemTapped,
-            backgroundColor: Theme.of(context).colorScheme.surface,
-            selectedItemColor: Theme.of(context).colorScheme.primary,
-            unselectedItemColor: Colors.grey,
+          bottomNavigationBar: Container(
+            decoration: BoxDecoration(
+              color: Theme.of(context).bottomNavigationBarTheme.backgroundColor,
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withValues(alpha: 0.05),
+                  blurRadius: 10,
+                  offset: const Offset(0, -2),
+                ),
+              ],
+            ),
+            child: BottomNavigationBar(
+              items: const <BottomNavigationBarItem>[
+                BottomNavigationBarItem(
+                  icon: Icon(Icons.home_outlined),
+                  activeIcon: Icon(Icons.home),
+                  label: '홈',
+                ),
+                BottomNavigationBarItem(
+                  icon: Icon(Icons.settings_outlined),
+                  activeIcon: Icon(Icons.settings),
+                  label: '설정',
+                ),
+                BottomNavigationBarItem(
+                  icon: Icon(Icons.article_outlined),
+                  activeIcon: Icon(Icons.article),
+                  label: '개발자 노트',
+                ),
+              ],
+              currentIndex: _selectedIndex,
+              onTap: _onItemTapped,
+              backgroundColor: Colors.transparent,
+              elevation: 0,
+              selectedItemColor: Theme.of(context).colorScheme.secondary,
+              unselectedItemColor: Theme.of(context).bottomNavigationBarTheme.unselectedItemColor,
+              selectedLabelStyle: const TextStyle(fontWeight: FontWeight.w600, fontSize: 12),
+              unselectedLabelStyle: const TextStyle(fontSize: 12),
+              type: BottomNavigationBarType.fixed,
+            ),
           ),
         ),
       ),

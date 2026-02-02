@@ -125,64 +125,80 @@ class _SettingScreenState extends State<SettingScreen> {
           const SizedBox(height: 20),
           // 다크 모드 설정 카드
           SettingCard(
-            icon: Icons.dark_mode, // 다크 모드 아이콘
-            title: AppLocalizations.of(context)!.darkMode, // '다크 모드' 제목
-            iconColor: Colors.deepPurple,
+            icon: Icons.wb_sunny_outlined,
+            title: AppLocalizations.of(context)!.darkMode,
+            iconColor: const Color(0xFFE91E63), // 핑크
             trailing: Switch(
               value: themeProvider.themeMode == ThemeMode.dark,
               onChanged: (value) {
                 themeProvider.toggleTheme(value);
               },
+              activeThumbColor: Theme.of(context).colorScheme.secondary,
+              activeTrackColor: Theme.of(context).colorScheme.secondary.withValues(alpha: 0.3),
             ),
           ),
-          const SizedBox(height: 10), // 카드 사이 여백
+          const SizedBox(height: 10),
           // 언어 설정 카드
           SettingCard(
-            icon: Icons.language, // 언어 아이콘
-            title: AppLocalizations.of(context)!.language, // '언어' 제목
-            iconColor: Colors.blue,
-            trailing: DropdownButton<Locale>(
-              value: localeProvider.locale, // 현재 선택된 언어
-              icon: const Icon(Icons.arrow_drop_down), // 드롭다운 아이콘
-              onChanged: (Locale? newLocale) {
-                if (newLocale != null) {
-                  localeProvider.setLocale(newLocale);
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
-                      content: Text(AppLocalizations.of(context)!.languageChanged(newLocale.languageCode == 'en' ? AppLocalizations.of(context)!.english : AppLocalizations.of(context)!.korean)),
-                      duration: const Duration(seconds: 2),
-                    ),
-                  );
-                }
-              },
-              items: const <DropdownMenuItem<Locale>>[
-                DropdownMenuItem<Locale>(
-                  value: Locale('en'),
-                  child: Text('English'),
+            icon: Icons.language,
+            title: AppLocalizations.of(context)!.language,
+            iconColor: const Color(0xFF2196F3), // 블루
+            trailing: Container(
+              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+              decoration: BoxDecoration(
+                border: Border.all(
+                  color: Theme.of(context).colorScheme.secondary.withValues(alpha: 0.3),
                 ),
-                DropdownMenuItem<Locale>(
-                  value: Locale('ko'),
-                  child: Text('한국어'),
+                borderRadius: BorderRadius.circular(8),
+              ),
+              child: DropdownButton<Locale>(
+                value: localeProvider.locale,
+                icon: Icon(
+                  Icons.arrow_drop_down,
+                  color: Theme.of(context).colorScheme.secondary,
                 ),
-              ],
+                underline: const SizedBox(),
+                style: TextStyle(
+                  color: Theme.of(context).textTheme.bodyLarge?.color,
+                  fontSize: 14,
+                ),
+                onChanged: (Locale? newLocale) {
+                  if (newLocale != null) {
+                    localeProvider.setLocale(newLocale);
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text(AppLocalizations.of(context)!.languageChanged(newLocale.languageCode == 'en' ? AppLocalizations.of(context)!.english : AppLocalizations.of(context)!.korean)),
+                        duration: const Duration(seconds: 2),
+                      ),
+                    );
+                  }
+                },
+                items: const <DropdownMenuItem<Locale>>[
+                  DropdownMenuItem<Locale>(
+                    value: Locale('en'),
+                    child: Text('English'),
+                  ),
+                  DropdownMenuItem<Locale>(
+                    value: Locale('ko'),
+                    child: Text('한국어'),
+                  ),
+                ],
+              ),
             ),
           ),
           SettingCard(
-              icon: Icons.coffee_outlined, // 네이버 카페를 상징하는 커피 아이콘
-              title: AppLocalizations.of(context)!.community, // '커뮤니티' 제목
-              iconColor: const Color(0xFF03C75A), // 네이버 녹색
-              trailing: IconButton(
-                // 오른쪽 끝에 버튼을 추가
-                icon: const Icon(
-                  Icons.arrow_forward_ios, // 오른쪽 화살표 아이콘
-                  size: 30,
-                  color: Colors.grey,
-                ),
-                onPressed: () {
-                  _showAdAndNavigate('https://arion-ayin.github.io/');
-                },
-              ),
+            icon: Icons.article_outlined,
+            title: AppLocalizations.of(context)!.community,
+            iconColor: const Color(0xFF4CAF50), // 그린
+            onTap: () {
+              _showAdAndNavigate('https://arion-ayin.github.io/');
+            },
+            trailing: Icon(
+              Icons.arrow_forward_ios,
+              size: 18,
+              color: Theme.of(context).colorScheme.secondary,
             ),
+          ),
         ],
       ),
     );

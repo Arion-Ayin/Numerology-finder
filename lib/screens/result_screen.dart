@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:numerology/numerology_calc.dart';
 import 'package:numerology/generated/l10n/app_localizations.dart';
+import 'package:numerology/themes.dart';
 
 class ResultScreen extends StatelessWidget {
   final String name;
@@ -11,6 +12,7 @@ class ResultScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final NumerologyCalculator calculator = NumerologyCalculator();
+    final isDark = Theme.of(context).brightness == Brightness.dark;
 
     // Calculate name-based numbers (Always available)
     final int destinyNumber = calculator.calculateDestinyNumber(name);
@@ -35,7 +37,6 @@ class ResultScreen extends StatelessWidget {
       reducedPersonalYear = calculator.calculatePersonalYearNumber(birthDate!);
     }
 
-    // --- 월수 계산을 위한 로직 추가 ---
     final String languageCode = Localizations.localeOf(context).languageCode;
 
     String getMonthText(int month) {
@@ -43,18 +44,8 @@ class ResultScreen extends StatelessWidget {
         return '$month월수';
       } else {
         const monthAbbreviations = [
-          'Jan',
-          'Feb',
-          'Mar',
-          'Apr',
-          'May',
-          'Jun',
-          'Jul',
-          'Aug',
-          'Sep',
-          'Oct',
-          'Nov',
-          'Dec',
+          'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
+          'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec',
         ];
         return monthAbbreviations[month - 1];
       }
@@ -62,155 +53,294 @@ class ResultScreen extends StatelessWidget {
 
     final int currentYear = DateTime.now().year;
 
+    Widget buildNumberCard(String label, String value, {Color? accentColor}) {
+      return Container(
+        margin: const EdgeInsets.only(bottom: 12),
+        padding: const EdgeInsets.all(16),
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+            colors: NumerologyThemes.cardGradient(isDark),
+          ),
+          borderRadius: BorderRadius.circular(16),
+          boxShadow: [NumerologyThemes.cardShadow(isDark)],
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Expanded(
+              child: Text(
+                label,
+                style: TextStyle(
+                  color: Theme.of(context).textTheme.bodyLarge?.color,
+                  fontSize: 15,
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
+            ),
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+              decoration: BoxDecoration(
+                color: (accentColor ?? Theme.of(context).colorScheme.secondary)
+                    .withValues(alpha: 0.15),
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: Text(
+                value,
+                style: TextStyle(
+                  color: accentColor ?? Theme.of(context).colorScheme.secondary,
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
+          ],
+        ),
+      );
+    }
+
     return Padding(
       padding: const EdgeInsets.all(16.0),
       child: SingleChildScrollView(
-        // 내용이 길어질 수 있으므로 스크롤 추가
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            Text(
-              '${AppLocalizations.of(context)!.name} : $name',
-              style: Theme.of(context).textTheme.bodyLarge,
-            ),
-            const SizedBox(height: 10),
-            if (birthDate != null)
-              Text(
-                '${AppLocalizations.of(context)!.birthDate} : ${birthDate!.toLocal().toString().split(' ')[0]}',
-                style: Theme.of(context).textTheme.bodyLarge,
+            // 프로필 카드
+            Container(
+              padding: const EdgeInsets.all(20),
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                  colors: NumerologyThemes.cardGradient(isDark),
+                ),
+                borderRadius: BorderRadius.circular(20),
+                boxShadow: [NumerologyThemes.cardShadow(isDark)],
               ),
-            const SizedBox(height: 20),
-            Text(
-              AppLocalizations.of(context)!.yourNumerologyResult,
-              style: Theme.of(context).textTheme.headlineSmall,
-            ),
-            const SizedBox(height: 10), // Add some space
-
-            if (lifePathNumber != null)
-              Text(
-                '${AppLocalizations.of(context)!.lifePathNumber} ${calculator.getNumberText(lifePathNumber)}',
-                style: Theme.of(context).textTheme.bodyLarge,
-              ),
-            Text(
-              '${AppLocalizations.of(context)!.destinyNumber} ${calculator.getNumberText(destinyNumber)}',
-              style: Theme.of(context).textTheme.bodyLarge,
-            ),
-            Text(
-              '${AppLocalizations.of(context)!.soulUrgeNumber} ${calculator.getNumberText(soulUrgeNumber)}',
-              style: Theme.of(context).textTheme.bodyLarge,
-            ),
-            Text(
-              '${AppLocalizations.of(context)!.personalityNumber} ${calculator.getNumberText(personalityNumber)}',
-              style: Theme.of(context).textTheme.bodyLarge,
-            ),
-            if (maturityNumber != null)
-              Text(
-                '${AppLocalizations.of(context)!.maturityNumber} ${calculator.getNumberText(maturityNumber)}',
-                style: Theme.of(context).textTheme.bodyLarge,
-              ),
-            if (birthdayNumber != null)
-              Text(
-                '${AppLocalizations.of(context)!.birthdayNumber} ${calculator.getNumberText(birthdayNumber)}',
-                style: Theme.of(context).textTheme.bodyLarge,
-              ),
-
-            if (birthDate != null) ...[
-              const SizedBox(height: 10),
-              const Divider(),
-              const SizedBox(height: 10),
-
-              // --- 개인 년수 표시 (수정됨) ---
-              Text(
-                // 요청하신 형식 (예: 1년수 : 2025 / 1)
-                '${AppLocalizations.of(context)!.personalYearNumber} $currentYear / $reducedPersonalYear',
-                style: Theme.of(context).textTheme.bodyLarge,
-              ),
-              const SizedBox(height: 10), // 월수 목록 전에 여백 추가
-              Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
+              child: Column(
                 children: [
-                  // 왼쪽 열 (1월 ~ 6월)
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        // 리스트 인덱스는 0부터 시작 (0=1월, 1=2월, ...)
-                        Text(
-                          '${getMonthText(1)} : ${monthNumbers![0]}',
-                          style: Theme.of(context).textTheme.bodyLarge,
+                  Row(
+                    children: [
+                      Container(
+                        width: 50,
+                        height: 50,
+                        decoration: BoxDecoration(
+                          color: Theme.of(context).colorScheme.secondary.withValues(alpha: 0.15),
+                          borderRadius: BorderRadius.circular(15),
                         ),
-                        const SizedBox(height: 3), // 항목 간 여백 추가
-                        Text(
-                          '${getMonthText(2)} : ${monthNumbers[1]}',
-                          style: Theme.of(context).textTheme.bodyLarge,
+                        child: Icon(
+                          Icons.person_outline,
+                          color: Theme.of(context).colorScheme.secondary,
+                          size: 26,
                         ),
-                        const SizedBox(height: 3),
-                        Text(
-                          '${getMonthText(3)} : ${monthNumbers[2]}',
-                          style: Theme.of(context).textTheme.bodyLarge,
+                      ),
+                      const SizedBox(width: 16),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              name,
+                              style: TextStyle(
+                                color: Theme.of(context).textTheme.titleLarge?.color,
+                                fontSize: 20,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            if (birthDate != null) ...[
+                              const SizedBox(height: 4),
+                              Text(
+                                birthDate!.toLocal().toString().split(' ')[0],
+                                style: TextStyle(
+                                  color: Theme.of(context).textTheme.bodyMedium?.color,
+                                  fontSize: 14,
+                                ),
+                              ),
+                            ],
+                          ],
                         ),
-                        const SizedBox(height: 3),
-                        Text(
-                          '${getMonthText(4)} : ${monthNumbers[3]}',
-                          style: Theme.of(context).textTheme.bodyLarge,
-                        ),
-                        const SizedBox(height: 3),
-                        Text(
-                          '${getMonthText(5)} : ${monthNumbers[4]}',
-                          style: Theme.of(context).textTheme.bodyLarge,
-                        ),
-                        const SizedBox(height: 3),
-                        Text(
-                          '${getMonthText(6)} : ${monthNumbers[5]}',
-                          style: Theme.of(context).textTheme.bodyLarge,
-                        ),
-                      ],
-                    ),
-                  ),
-                  // 오른쪽 열 (7월 ~ 12월)
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          '${getMonthText(7)} : ${monthNumbers[6]}',
-                          style: Theme.of(context).textTheme.bodyLarge,
-                        ),
-                        const SizedBox(height: 3),
-                        Text(
-                          '${getMonthText(8)} : ${monthNumbers[7]}',
-                          style: Theme.of(context).textTheme.bodyLarge,
-                        ),
-                        const SizedBox(height: 3),
-
-                        Text(
-                          '${getMonthText(9)} : ${monthNumbers[8]}',
-                          style: Theme.of(context).textTheme.bodyLarge,
-                        ),
-                        const SizedBox(height: 3),
-
-                        Text(
-                          '${getMonthText(10)} : ${monthNumbers[9]}',
-                          style: Theme.of(context).textTheme.bodyLarge,
-                        ),
-                        const SizedBox(height: 3),
-
-                        Text(
-                          '${getMonthText(11)} : ${monthNumbers[10]}',
-                          style: Theme.of(context).textTheme.bodyLarge,
-                        ),
-                        const SizedBox(height: 3),
-
-                        Text(
-                          '${getMonthText(12)} : ${monthNumbers[11]}',
-                          style: Theme.of(context).textTheme.bodyLarge,
-                        ),
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
                 ],
               ),
+            ),
+            const SizedBox(height: 24),
+
+            // 섹션 타이틀
+            Text(
+              AppLocalizations.of(context)!.yourNumerologyResult,
+              style: TextStyle(
+                color: Theme.of(context).colorScheme.secondary,
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            const SizedBox(height: 16),
+
+            // 숫자 카드들
+            if (lifePathNumber != null)
+              buildNumberCard(
+                AppLocalizations.of(context)!.lifePathNumber,
+                calculator.getNumberText(lifePathNumber),
+              ),
+            buildNumberCard(
+              AppLocalizations.of(context)!.destinyNumber,
+              calculator.getNumberText(destinyNumber),
+            ),
+            buildNumberCard(
+              AppLocalizations.of(context)!.soulUrgeNumber,
+              calculator.getNumberText(soulUrgeNumber),
+            ),
+            buildNumberCard(
+              AppLocalizations.of(context)!.personalityNumber,
+              calculator.getNumberText(personalityNumber),
+            ),
+            if (maturityNumber != null)
+              buildNumberCard(
+                AppLocalizations.of(context)!.maturityNumber,
+                calculator.getNumberText(maturityNumber),
+              ),
+            if (birthdayNumber != null)
+              buildNumberCard(
+                AppLocalizations.of(context)!.birthdayNumber,
+                calculator.getNumberText(birthdayNumber),
+              ),
+
+            if (birthDate != null) ...[
+              const SizedBox(height: 24),
+
+              // 개인 년수 섹션
+              Text(
+                '${AppLocalizations.of(context)!.personalYearNumber} $currentYear',
+                style: TextStyle(
+                  color: Theme.of(context).colorScheme.secondary,
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              const SizedBox(height: 16),
+
+              // 년수 카드
+              Container(
+                padding: const EdgeInsets.all(20),
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
+                    colors: NumerologyThemes.cardGradient(isDark),
+                  ),
+                  borderRadius: BorderRadius.circular(20),
+                  boxShadow: [NumerologyThemes.cardShadow(isDark)],
+                ),
+                child: Column(
+                  children: [
+                    // 년수 표시
+                    Container(
+                      width: 70,
+                      height: 70,
+                      decoration: BoxDecoration(
+                        gradient: NumerologyThemes.numberGradient,
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                      child: Center(
+                        child: Text(
+                          '$reducedPersonalYear',
+                          style: TextStyle(
+                            color: isDark ? Colors.black : Colors.white,
+                            fontSize: 32,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 20),
+
+                    // 월수 그리드
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Expanded(
+                          child: Column(
+                            children: List.generate(6, (index) {
+                              final month = index + 1;
+                              return Padding(
+                                padding: const EdgeInsets.symmetric(vertical: 4),
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Text(
+                                      getMonthText(month),
+                                      style: Theme.of(context).textTheme.bodyMedium,
+                                    ),
+                                    Container(
+                                      width: 32,
+                                      height: 32,
+                                      decoration: BoxDecoration(
+                                        color: Theme.of(context).colorScheme.secondary.withValues(alpha: 0.1),
+                                        borderRadius: BorderRadius.circular(8),
+                                      ),
+                                      child: Center(
+                                        child: Text(
+                                          '${monthNumbers![index]}',
+                                          style: TextStyle(
+                                            color: Theme.of(context).colorScheme.secondary,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              );
+                            }),
+                          ),
+                        ),
+                        const SizedBox(width: 24),
+                        Expanded(
+                          child: Column(
+                            children: List.generate(6, (index) {
+                              final month = index + 7;
+                              return Padding(
+                                padding: const EdgeInsets.symmetric(vertical: 4),
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Text(
+                                      getMonthText(month),
+                                      style: Theme.of(context).textTheme.bodyMedium,
+                                    ),
+                                    Container(
+                                      width: 32,
+                                      height: 32,
+                                      decoration: BoxDecoration(
+                                        color: Theme.of(context).colorScheme.secondary.withValues(alpha: 0.1),
+                                        borderRadius: BorderRadius.circular(8),
+                                      ),
+                                      child: Center(
+                                        child: Text(
+                                          '${monthNumbers![index + 6]}',
+                                          style: TextStyle(
+                                            color: Theme.of(context).colorScheme.secondary,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              );
+                            }),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
             ],
+            const SizedBox(height: 20),
           ],
         ),
       ),
