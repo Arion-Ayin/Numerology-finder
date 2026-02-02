@@ -55,44 +55,38 @@ class ResultScreen extends StatelessWidget {
 
     Widget buildNumberCard(String label, String value, {Color? accentColor}) {
       return Container(
-        margin: const EdgeInsets.only(bottom: 12),
-        padding: const EdgeInsets.all(16),
+        width: (MediaQuery.of(context).size.width / 3) - 22, // 3열 레이아웃을 위한 너비 조정
+        padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 12),
         decoration: BoxDecoration(
           gradient: LinearGradient(
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
             colors: NumerologyThemes.cardGradient(isDark),
           ),
-          borderRadius: BorderRadius.circular(16),
+          borderRadius: BorderRadius.circular(14),
           boxShadow: [NumerologyThemes.cardShadow(isDark)],
         ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Expanded(
-              child: Text(
-                label,
-                style: TextStyle(
-                  color: Theme.of(context).textTheme.bodyLarge?.color,
-                  fontSize: 15,
-                  fontWeight: FontWeight.w500,
-                ),
+            Text(
+              label,
+              style: TextStyle(
+                color:
+                    Theme.of(context).textTheme.bodyLarge?.color?.withOpacity(0.8),
+                fontSize: 12,
+                fontWeight: FontWeight.w500,
               ),
+              overflow: TextOverflow.ellipsis,
             ),
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-              decoration: BoxDecoration(
-                color: (accentColor ?? Theme.of(context).colorScheme.secondary)
-                    .withValues(alpha: 0.15),
-                borderRadius: BorderRadius.circular(12),
-              ),
-              child: Text(
-                value,
-                style: TextStyle(
-                  color: accentColor ?? Theme.of(context).colorScheme.secondary,
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                ),
+            const SizedBox(height: 1),
+            Text(
+              value,
+              style: TextStyle(
+                color: accentColor ?? Theme.of(context).colorScheme.secondary,
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
               ),
             ),
           ],
@@ -118,50 +112,48 @@ class ResultScreen extends StatelessWidget {
                 borderRadius: BorderRadius.circular(20),
                 boxShadow: [NumerologyThemes.cardShadow(isDark)],
               ),
-              child: Column(
+              child: Row(
                 children: [
-                  Row(
-                    children: [
-                      Container(
-                        width: 50,
-                        height: 50,
-                        decoration: BoxDecoration(
-                          color: Theme.of(context).colorScheme.secondary.withValues(alpha: 0.15),
-                          borderRadius: BorderRadius.circular(15),
+                  Container(
+                    width: 50,
+                    height: 50,
+                    decoration: BoxDecoration(
+                      color:
+                          Theme.of(context).colorScheme.secondary.withOpacity(0.15),
+                      borderRadius: BorderRadius.circular(15),
+                    ),
+                    child: Icon(
+                      Icons.person_outline,
+                      color: Theme.of(context).colorScheme.secondary,
+                      size: 26,
+                    ),
+                  ),
+                  const SizedBox(width: 16),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          name,
+                          style: TextStyle(
+                            color: Theme.of(context).textTheme.titleLarge?.color,
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
+                          ),
+                          overflow: TextOverflow.ellipsis,
                         ),
-                        child: Icon(
-                          Icons.person_outline,
-                          color: Theme.of(context).colorScheme.secondary,
-                          size: 26,
-                        ),
-                      ),
-                      const SizedBox(width: 16),
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              name,
-                              style: TextStyle(
-                                color: Theme.of(context).textTheme.titleLarge?.color,
-                                fontSize: 20,
-                                fontWeight: FontWeight.bold,
-                              ),
+                        if (birthDate != null) ...[
+                          const SizedBox(height: 4),
+                          Text(
+                            birthDate!.toLocal().toString().split(' ')[0],
+                            style: TextStyle(
+                              color: Theme.of(context).textTheme.bodyMedium?.color,
+                              fontSize: 14,
                             ),
-                            if (birthDate != null) ...[
-                              const SizedBox(height: 4),
-                              Text(
-                                birthDate!.toLocal().toString().split(' ')[0],
-                                style: TextStyle(
-                                  color: Theme.of(context).textTheme.bodyMedium?.color,
-                                  fontSize: 14,
-                                ),
-                              ),
-                            ],
-                          ],
-                        ),
-                      ),
-                    ],
+                          ),
+                        ],
+                      ],
+                    ),
                   ),
                 ],
               ),
@@ -179,34 +171,40 @@ class ResultScreen extends StatelessWidget {
             ),
             const SizedBox(height: 16),
 
-            // 숫자 카드들
-            if (lifePathNumber != null)
-              buildNumberCard(
-                AppLocalizations.of(context)!.lifePathNumber,
-                calculator.getNumberText(lifePathNumber),
-              ),
-            buildNumberCard(
-              AppLocalizations.of(context)!.destinyNumber,
-              calculator.getNumberText(destinyNumber),
+            // 숫자 카드들 (Wrap으로 변경)
+            Wrap(
+              spacing: 12, // 가로 간격
+              runSpacing: 12, // 세로 간격
+              children: [
+                if (lifePathNumber != null)
+                  buildNumberCard(
+                    AppLocalizations.of(context)!.lifePathNumber,
+                    calculator.getNumberText(lifePathNumber),
+                  ),
+                buildNumberCard(
+                  AppLocalizations.of(context)!.destinyNumber,
+                  calculator.getNumberText(destinyNumber),
+                ),
+                buildNumberCard(
+                  AppLocalizations.of(context)!.soulUrgeNumber,
+                  calculator.getNumberText(soulUrgeNumber),
+                ),
+                buildNumberCard(
+                  AppLocalizations.of(context)!.personalityNumber,
+                  calculator.getNumberText(personalityNumber),
+                ),
+                if (maturityNumber != null)
+                  buildNumberCard(
+                    AppLocalizations.of(context)!.maturityNumber,
+                    calculator.getNumberText(maturityNumber),
+                  ),
+                if (birthdayNumber != null)
+                  buildNumberCard(
+                    AppLocalizations.of(context)!.birthdayNumber,
+                    calculator.getNumberText(birthdayNumber),
+                  ),
+              ],
             ),
-            buildNumberCard(
-              AppLocalizations.of(context)!.soulUrgeNumber,
-              calculator.getNumberText(soulUrgeNumber),
-            ),
-            buildNumberCard(
-              AppLocalizations.of(context)!.personalityNumber,
-              calculator.getNumberText(personalityNumber),
-            ),
-            if (maturityNumber != null)
-              buildNumberCard(
-                AppLocalizations.of(context)!.maturityNumber,
-                calculator.getNumberText(maturityNumber),
-              ),
-            if (birthdayNumber != null)
-              buildNumberCard(
-                AppLocalizations.of(context)!.birthdayNumber,
-                calculator.getNumberText(birthdayNumber),
-              ),
 
             if (birthDate != null) ...[
               const SizedBox(height: 24),
@@ -242,7 +240,14 @@ class ResultScreen extends StatelessWidget {
                       height: 70,
                       decoration: BoxDecoration(
                         gradient: NumerologyThemes.numberGradient,
-                        borderRadius: BorderRadius.circular(20),
+                        shape: BoxShape.circle,
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.deepPurple.withOpacity(0.4),
+                            blurRadius: 10,
+                            offset: const Offset(0, 4),
+                          ),
+                        ],
                       ),
                       child: Center(
                         child: Text(
@@ -258,83 +263,62 @@ class ResultScreen extends StatelessWidget {
                     const SizedBox(height: 20),
 
                     // 월수 그리드
-                    Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Expanded(
+                    GridView.builder(
+                      shrinkWrap: true,
+                      physics: const NeverScrollableScrollPhysics(),
+                      gridDelegate:
+                          const SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: 6,
+                        crossAxisSpacing: 8,
+                        mainAxisSpacing: 12,
+                        childAspectRatio: 0.8,
+                      ),
+                      itemCount: 12,
+                      itemBuilder: (context, index) {
+                        final month = index + 1;
+                        return FittedBox(
+                          fit: BoxFit.scaleDown,
                           child: Column(
-                            children: List.generate(6, (index) {
-                              final month = index + 1;
-                              return Padding(
-                                padding: const EdgeInsets.symmetric(vertical: 4),
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Text(
-                                      getMonthText(month),
-                                      style: Theme.of(context).textTheme.bodyMedium,
-                                    ),
-                                    Container(
-                                      width: 32,
-                                      height: 32,
-                                      decoration: BoxDecoration(
-                                        color: Theme.of(context).colorScheme.secondary.withValues(alpha: 0.1),
-                                        borderRadius: BorderRadius.circular(8),
-                                      ),
-                                      child: Center(
-                                        child: Text(
-                                          '${monthNumbers![index]}',
-                                          style: TextStyle(
-                                            color: Theme.of(context).colorScheme.secondary,
-                                            fontWeight: FontWeight.bold,
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                  ],
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text(
+                                getMonthText(month),
+                                style: TextStyle(
+                                  fontSize: 11,
+                                  color: Theme.of(context)
+                                      .textTheme
+                                      .bodySmall
+                                      ?.color
+                                      ?.withOpacity(0.7),
                                 ),
-                              );
-                            }),
-                          ),
-                        ),
-                        const SizedBox(width: 24),
-                        Expanded(
-                          child: Column(
-                            children: List.generate(6, (index) {
-                              final month = index + 7;
-                              return Padding(
-                                padding: const EdgeInsets.symmetric(vertical: 4),
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Text(
-                                      getMonthText(month),
-                                      style: Theme.of(context).textTheme.bodyMedium,
-                                    ),
-                                    Container(
-                                      width: 32,
-                                      height: 32,
-                                      decoration: BoxDecoration(
-                                        color: Theme.of(context).colorScheme.secondary.withValues(alpha: 0.1),
-                                        borderRadius: BorderRadius.circular(8),
-                                      ),
-                                      child: Center(
-                                        child: Text(
-                                          '${monthNumbers![index + 6]}',
-                                          style: TextStyle(
-                                            color: Theme.of(context).colorScheme.secondary,
-                                            fontWeight: FontWeight.bold,
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                  ],
+                              ),
+                              const SizedBox(height: 6),
+                              Container(
+                                width: 32,
+                                height: 32,
+                                decoration: BoxDecoration(
+                                  color: Theme.of(context)
+                                      .colorScheme
+                                      .secondary
+                                      .withOpacity(0.1),
+                                  borderRadius: BorderRadius.circular(8),
                                 ),
-                              );
-                            }),
+                                child: Center(
+                                  child: Text(
+                                    '${monthNumbers![index]}',
+                                    style: TextStyle(
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .secondary,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
                           ),
-                        ),
-                      ],
+                        );
+                      },
                     ),
                   ],
                 ),

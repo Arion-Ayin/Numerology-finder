@@ -163,7 +163,7 @@ final ThemeData numerologyTheme = ThemeData(
   ),
   bottomNavigationBarTheme: const BottomNavigationBarThemeData(
     backgroundColor: NumerologyThemes._lightCard,
-    selectedItemColor: NumerologyThemes._lightSecondary,
+    selectedItemColor: Colors.black,
     unselectedItemColor: NumerologyThemes._lightTextSecondary,
     type: BottomNavigationBarType.fixed,
     elevation: 8,
@@ -300,7 +300,7 @@ final ThemeData numerologyDarkTheme = ThemeData(
   ),
   bottomNavigationBarTheme: const BottomNavigationBarThemeData(
     backgroundColor: NumerologyThemes._darkSurface,
-    selectedItemColor: NumerologyThemes._darkSecondary,
+    selectedItemColor: Colors.white,
     unselectedItemColor: NumerologyThemes._darkTextSecondary,
     type: BottomNavigationBarType.fixed,
     elevation: 0,

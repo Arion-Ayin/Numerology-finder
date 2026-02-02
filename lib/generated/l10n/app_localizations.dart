@@ -167,31 +167,31 @@ abstract class AppLocalizations {
   /// No description provided for @lifePathNumber.
   ///
   /// In en, this message translates to:
-  /// **'Life Path Number :'**
+  /// **'Life Path Number'**
   String get lifePathNumber;
 
   /// No description provided for @destinyNumber.
   ///
   /// In en, this message translates to:
-  /// **'Destiny Number :'**
+  /// **'Destiny Number'**
   String get destinyNumber;
 
   /// No description provided for @soulUrgeNumber.
   ///
   /// In en, this message translates to:
-  /// **'Soul Urge Number :'**
+  /// **'Soul Urge Number'**
   String get soulUrgeNumber;
 
   /// No description provided for @personalityNumber.
   ///
   /// In en, this message translates to:
-  /// **'Personality Number :'**
+  /// **'Personality Number'**
   String get personalityNumber;
 
   /// No description provided for @maturityNumber.
   ///
   /// In en, this message translates to:
-  /// **'Maturity Number :'**
+  /// **'Maturity Number'**
   String get maturityNumber;
 
   /// No description provided for @birthdayNumber.
@@ -209,7 +209,7 @@ abstract class AppLocalizations {
   /// No description provided for @personalMonthNumber.
   ///
   /// In en, this message translates to:
-  /// **'Personal Month Number :'**
+  /// **'Personal Month Number'**
   String get personalMonthNumber;
 
   /// No description provided for @back.

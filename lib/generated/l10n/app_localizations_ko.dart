@@ -42,28 +42,28 @@ class AppLocalizationsKo extends AppLocalizations {
   String get yourNumerologyResult => '당신의 수비학 결과 :';
 
   @override
-  String get lifePathNumber => '인생 여정 수 :';
+  String get lifePathNumber => '인생여정 수';
 
   @override
-  String get destinyNumber => '운명 수 :';
+  String get destinyNumber => '운명 수';
 
   @override
-  String get soulUrgeNumber => '혼의 수 :';
+  String get soulUrgeNumber => '혼의 수';
 
   @override
-  String get personalityNumber => '성격 수 :';
+  String get personalityNumber => '성격 수';
 
   @override
-  String get maturityNumber => '완성 수 :';
+  String get maturityNumber => '완성 수';
 
   @override
-  String get birthdayNumber => '생일 수 :';
+  String get birthdayNumber => '생일 수';
 
   @override
   String get personalYearNumber => '1년수 :';
 
   @override
-  String get personalMonthNumber => '1달수 :';
+  String get personalMonthNumber => '1달수';
 
   @override
   String get back => '뒤로';

@@ -42,19 +42,19 @@ class AppLocalizationsEn extends AppLocalizations {
   String get yourNumerologyResult => 'Your Numerology Result :';
 
   @override
-  String get lifePathNumber => 'Life Path Number :';
+  String get lifePathNumber => 'Life Path Number';
 
   @override
-  String get destinyNumber => 'Destiny Number :';
+  String get destinyNumber => 'Destiny Number';
 
   @override
-  String get soulUrgeNumber => 'Soul Urge Number :';
+  String get soulUrgeNumber => 'Soul Urge Number';
 
   @override
-  String get personalityNumber => 'Personality Number :';
+  String get personalityNumber => 'Personality Number';
 
   @override
-  String get maturityNumber => 'Maturity Number :';
+  String get maturityNumber => 'Maturity Number';
 
   @override
   String get birthdayNumber => 'Birthday Number :';
@@ -63,7 +63,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get personalYearNumber => 'Personal Year Number :';
 
   @override
-  String get personalMonthNumber => 'Personal Month Number :';
+  String get personalMonthNumber => 'Personal Month Number';
 
   @override
   String get back => 'Back';
