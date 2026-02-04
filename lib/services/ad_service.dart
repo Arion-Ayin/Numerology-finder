@@ -5,6 +5,8 @@ import 'package:numerology/ads/ad_ids.dart';
 /// 전면 광고 및 광고 정책을 관리하는 서비스 클래스입니다.
 class AdService {
   InterstitialAd? _interstitialAd;
+  InterstitialAd? _splashAd; // 스플래시용 미리 로드된 광고
+  bool _isSplashAdLoading = false;
   int _calculateClickCount = 0;
   final int _adFrequency = 7; // 광고 표시 빈도 (7번 클릭마다)
 
@@ -15,7 +17,32 @@ class AdService {
   Future<void> initialize() async {
     await _loadCalculateClickCount();
     _loadInterstitialAd();
+    preloadSplashAd(); // 스플래시 광고 미리 로드
   }
+
+  /// 스플래시 광고를 미리 로드합니다. (앱 시작 시 호출)
+  void preloadSplashAd() {
+    if (_isSplashAdLoading || _splashAd != null) return;
+    _isSplashAdLoading = true;
+
+    InterstitialAd.load(
+      adUnitId: AdIds.interstitialAdUnitId,
+      request: const AdRequest(),
+      adLoadCallback: InterstitialAdLoadCallback(
+        onAdLoaded: (ad) {
+          _splashAd = ad;
+          _isSplashAdLoading = false;
+        },
+        onAdFailedToLoad: (error) {
+          _splashAd = null;
+          _isSplashAdLoading = false;
+        },
+      ),
+    );
+  }
+
+  /// 스플래시 광고가 로드되었는지 확인합니다.
+  bool get isSplashAdReady => _splashAd != null;
 
   /// 전면 광고를 로드합니다.
   void _loadInterstitialAd() {
@@ -59,11 +86,10 @@ class AdService {
     return false; // 광고가 표시되지 않음
   }
 
-  /// 스플래시 화면에서 사용할 전면 광고를 로드하고 표시합니다.
-  Future<void> loadAndShowSplashAd({
+  /// 미리 로드된 스플래시 광고를 즉시 표시합니다.
+  /// 광고가 표시되면 true, 표시되지 않으면 false를 반환합니다.
+  Future<bool> showSplashAd({
     required Function onAdDismissed,
-    required Function onAdFailed,
-    Duration timeout = const Duration(seconds: 5), // 기본 타임아웃 5초
   }) async {
     final prefs = await SharedPreferences.getInstance();
     final lastAdShowTimeMillis = prefs.getInt(_lastSplashAdShowTimeKey) ?? 0;
@@ -72,48 +98,36 @@ class AdService {
     // 30분 (밀리초 단위)
     const thirtyMinutesInMillis = 30 * 60 * 1000;
 
+    // 30분 쿨다운 체크
     if (currentTimeMillis - lastAdShowTimeMillis < thirtyMinutesInMillis) {
-      onAdFailed(); // 30분 이내에는 광고를 보여주지 않음
-      return;
+      return false;
     }
 
-    InterstitialAd? splashAd;
-    bool adLoaded = false;
+    // 광고가 로드되어 있지 않으면 false 반환 (대기 없이 즉시 진행)
+    if (_splashAd == null) {
+      return false;
+    }
 
-    // 타임아웃 처리
-    Future.delayed(timeout, () {
-      if (!adLoaded) {
-        onAdFailed(); // 타임아웃 시 실패 콜백 실행
-      }
-    });
+    // 광고 표시 시간 저장
+    await prefs.setInt(_lastSplashAdShowTimeKey, currentTimeMillis);
 
-    await InterstitialAd.load(
-      adUnitId: AdIds.interstitialAdUnitId,
-      request: const AdRequest(),
-      adLoadCallback: InterstitialAdLoadCallback(
-        onAdLoaded: (ad) async {
-          adLoaded = true;
-          // 광고가 성공적으로 로드되면, 현재 시간을 저장
-          await prefs.setInt(_lastSplashAdShowTimeKey, currentTimeMillis);
-          splashAd = ad;
-          splashAd!.fullScreenContentCallback = FullScreenContentCallback(
-            onAdDismissedFullScreenContent: (ad) {
-              onAdDismissed(); // 광고가 닫히면 콜백 실행
-              ad.dispose();
-            },
-            onAdFailedToShowFullScreenContent: (ad, error) {
-              onAdFailed(); // 광고 표시에 실패하면 콜백 실행
-              ad.dispose();
-            },
-          );
-          splashAd!.show(); // 광고 표시
-        },
-        onAdFailedToLoad: (error) {
-          adLoaded = true;
-          onAdFailed(); // 광고 로드에 실패하면 콜백 실행
-        },
-      ),
+    _splashAd!.fullScreenContentCallback = FullScreenContentCallback(
+      onAdDismissedFullScreenContent: (ad) {
+        onAdDismissed();
+        ad.dispose();
+        _splashAd = null;
+        preloadSplashAd(); // 다음 세션을 위해 미리 로드
+      },
+      onAdFailedToShowFullScreenContent: (ad, error) {
+        onAdDismissed();
+        ad.dispose();
+        _splashAd = null;
+        preloadSplashAd();
+      },
     );
+
+    _splashAd!.show();
+    return true;
   }
 
   Future<void> _loadCalculateClickCount() async {
@@ -128,5 +142,6 @@ class AdService {
 
   void dispose() {
     _interstitialAd?.dispose();
+    _splashAd?.dispose();
   }
 }

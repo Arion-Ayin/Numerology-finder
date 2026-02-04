@@ -20,7 +20,12 @@ import 'package:firebase_core/firebase_core.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
-  MobileAds.instance.initialize();
+  await MobileAds.instance.initialize();
+
+  // AdService 초기화 및 스플래시 광고 미리 로드
+  final adService = AdService();
+  await adService.initialize();
+
   // 앱을 화면에 보여줘요.
   runApp(
     // 여러 Provider를 함께 사용할 수 있게 해주는 MultiProvider를 사용해요.
@@ -32,6 +37,8 @@ void main() async {
         ChangeNotifierProvider(create: (context) => LocaleProvider()),
         // 'HistoryService'를 앱 전체에서 사용할 수 있게 합니다.
         ChangeNotifierProvider(create: (context) => HistoryService()),
+        // 'AdService'를 앱 전체에서 사용할 수 있게 합니다. (미리 로드된 광고 공유)
+        Provider<AdService>.value(value: adService),
       ],
       // 'MyApp'이라는 앱의 가장 큰 부분을 'ThemeProvider'와 'LocaleProvider'와 함께 실행해요.
       child: const MyApp(),
@@ -120,8 +127,8 @@ class _InputScreenState extends State<InputScreen> {
     _historyService = Provider.of<HistoryService>(context, listen: false);
     _historyService.loadHistory(); // 기록 불러오기
 
-    _adService = AdService();
-    _adService.initialize(); // 광고 서비스 초기화
+    // Provider에서 AdService 가져오기 (main에서 이미 초기화됨)
+    _adService = Provider.of<AdService>(context, listen: false);
     _loadNativeAd();
   }
 
@@ -148,7 +155,6 @@ class _InputScreenState extends State<InputScreen> {
 
   @override
   void dispose() {
-    _adService.dispose();
     _nameController.dispose();
     _nativeAd?.dispose();
     super.dispose();
@@ -347,8 +353,8 @@ class _InputScreenState extends State<InputScreen> {
             TextField(
               controller: _nameController, // 이 칸의 글씨는 '_nameController'가 관리해요.
               decoration: InputDecoration(
-                labelText:
-                    AppLocalizations.of(context)!.name, // 칸 위에 'Name'이라고 써줘요.
+                labelText: AppLocalizations.of(context)!.name,
+                hintText: AppLocalizations.of(context)!.nameHint,
               ),
             ),
             // 칸 아래에 20만큼의 빈 공간을 만들어요.
@@ -369,13 +375,9 @@ class _InputScreenState extends State<InputScreen> {
                   ),
                 ),
                 // 날짜를 선택하는 버튼을 만들어요.
-                TextButton(
-                  onPressed:
-                      () =>
-                          _selectDate(context), // 버튼을 누르면 달력 화면을 보여주는 함수를 실행해요.
-                  child: Text(
-                    AppLocalizations.of(context)!.chooseDate,
-                  ), // 버튼에 'Choose Date'라고 써요.
+                ElevatedButton(
+                  onPressed: () => _selectDate(context),
+                  child: Text(AppLocalizations.of(context)!.chooseDate),
                 ),
               ],
             ),

@@ -75,7 +75,7 @@ class AppLocalizationsKo extends AppLocalizations {
   String get reset => '초기화';
 
   @override
-  String get noDateChosen => '날짜 미선택 (선택사항)';
+  String get noDateChosen => '입력된 날짜';
 
   @override
   String get chooseDate => '날짜 선택';
@@ -115,4 +115,7 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get inputReset => '입력이 초기화되었습니다.';
+
+  @override
+  String get nameHint => '이름을 여기에 입력해주세요';
 }

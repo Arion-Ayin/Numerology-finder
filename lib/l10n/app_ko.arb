@@ -22,7 +22,7 @@
     "back": "뒤로",
     "calculate": "계산",
     "reset": "초기화",
-    "noDateChosen": "날짜 미선택 (선택사항)",
+    "noDateChosen": "입력된 날짜",
     "chooseDate": "날짜 선택",
     "history": "기록",
     "pleaseEnterNameAndBirthDate": "이름을 입력해주세요.",
@@ -34,5 +34,6 @@
     "whyDidWeMakeThisAppSubtitle": "• 누구나 손쉽게 이 정보들에 접근 가능하면 좋겠다는 마음에",
     "copyrightText": "© 2025 Arion Ayin. All rights reserved.",
     "languageChanged": "언어가 {languageName}으로 변경되었습니다.",
-    "inputReset": "입력이 초기화되었습니다."
+    "inputReset": "입력이 초기화되었습니다.",
+    "nameHint": "이름을 여기에 입력해주세요"
 }

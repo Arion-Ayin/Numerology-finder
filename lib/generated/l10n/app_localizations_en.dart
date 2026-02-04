@@ -75,7 +75,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get reset => 'Reset';
 
   @override
-  String get noDateChosen => 'No date chosen (Optional)';
+  String get noDateChosen => 'Entered date';
 
   @override
   String get chooseDate => 'Choose Date';
@@ -117,4 +117,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get inputReset => 'Input has been reset.';
+
+  @override
+  String get nameHint => 'Please enter your name here';
 }

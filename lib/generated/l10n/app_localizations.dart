@@ -233,7 +233,7 @@ abstract class AppLocalizations {
   /// No description provided for @noDateChosen.
   ///
   /// In en, this message translates to:
-  /// **'No date chosen (Optional)'**
+  /// **'Entered date'**
   String get noDateChosen;
 
   /// No description provided for @chooseDate.
@@ -307,6 +307,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Input has been reset.'**
   String get inputReset;
+
+  /// No description provided for @nameHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Please enter your name here'**
+  String get nameHint;
 }
 
 class _AppLocalizationsDelegate

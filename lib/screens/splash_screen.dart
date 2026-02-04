@@ -34,61 +34,36 @@ class _SplashScreenState extends State<SplashScreen> {
   }
 
   Future<void> _initializeApp() async {
-    // 스플래시 화면 시작 시간 기록
-    final startTime = DateTime.now();
+    // async gap 전에 서비스 참조 가져오기
+    final historyService = Provider.of<HistoryService>(context, listen: false);
+    final adService = Provider.of<AdService>(context, listen: false);
 
     // 1. HistoryService에서 기록 데이터를 백그라운드에서 로드합니다. (await 제거)
     // 오류는 catchError로 처리하여 앱 충돌을 방지합니다.
-    Provider.of<HistoryService>(context, listen: false)
-        .loadHistory()
-        .timeout(
-          const Duration(seconds: 3),
-          onTimeout: () {
-            // 타임아웃 시 경고 출력 (릴리즈에서는 무시됨)
-            if (kDebugMode) {
-              print('히스토리 로딩 타임아웃 (3초 초과)');
-            }
-          },
-        )
-        .catchError((e) {
+    historyService.loadHistory().timeout(
+      const Duration(seconds: 3),
+      onTimeout: () {
+        if (kDebugMode) {
+          print('히스토리 로딩 타임아웃 (3초 초과)');
+        }
+      },
+    ).catchError((e) {
       if (kDebugMode) {
         print('백그라운드 히스토리 로딩 실패: $e');
       }
     });
 
-    // 2. 디버그 모드에서도 스플래시 화면을 최소 2초 보여줍니다.
-    final adService = AdService();
+    // 2. 스플래시 화면 최소 표시 시간 (1.5초) - 브랜딩 목적
+    await Future.delayed(const Duration(milliseconds: 1500));
+    if (!mounted) return;
 
-    if (kDebugMode) {
-      // 디버그 모드: 테스트 광고 ID 사용 + 2초 최소 대기
-      final elapsed = DateTime.now().difference(startTime);
-      final remainingTime = const Duration(seconds: 2) - elapsed;
+    // 3. 미리 로드된 스플래시 광고 즉시 표시 (대기 없음)
+    final adShown = await adService.showSplashAd(
+      onAdDismissed: _navigateToMainScreen,
+    );
 
-      if (remainingTime.inMilliseconds > 0) {
-        await Future.delayed(remainingTime);
-      }
-
-      // 테스트 광고 표시 (타임아웃 3초)
-      await adService.loadAndShowSplashAd(
-        onAdDismissed: _navigateToMainScreen,
-        onAdFailed: _navigateToMainScreen,
-        timeout: const Duration(seconds: 3), // 광고 로딩 타임아웃
-      );
-    } else {
-      // 출시 모드: 실제 광고 ID 사용 (타임아웃 3초)
-      await adService.loadAndShowSplashAd(
-        onAdDismissed: _navigateToMainScreen,
-        onAdFailed: _navigateToMainScreen,
-        timeout: const Duration(seconds: 3), // 광고 로딩 타임아웃
-      );
-    }
-
-    // 전체 스플래시 화면 최대 시간 제한 (4초)
-    final totalElapsed = DateTime.now().difference(startTime);
-    if (totalElapsed.inSeconds > 4 && mounted) {
-      if (kDebugMode) {
-        print('스플래시 화면 최대 시간 초과 (4초), 강제 이동');
-      }
+    // 광고가 표시되지 않았으면 바로 메인 화면으로 이동
+    if (!adShown) {
       _navigateToMainScreen();
     }
   }

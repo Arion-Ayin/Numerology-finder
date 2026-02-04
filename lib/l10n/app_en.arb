@@ -22,7 +22,7 @@
     "back": "Back",
     "calculate": "Calculate",
     "reset": "Reset",
-    "noDateChosen": "No date chosen (Optional)",
+    "noDateChosen": "Entered date",
     "chooseDate": "Choose Date",
     "history": "History",
     "pleaseEnterNameAndBirthDate": "Please enter your name.",
@@ -34,5 +34,6 @@
     "whyDidWeMakeThisAppSubtitle": "• With the hope that anyone can easily access this information.",
     "copyrightText": "© 2025 Arion Ayin. All rights reserved.",
     "languageChanged": "Language changed to {languageName}",
-    "inputReset": "Input has been reset."
+    "inputReset": "Input has been reset.",
+    "nameHint": "Please enter your name here"
 }
