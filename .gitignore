@@ -114,7 +114,15 @@ captures/
 *.keystore
 
 # Google Services (e.g. APIs or Firebase)
-# google-services.json
+**/google-services.json
+**/GoogleService-Info.plist
+
+# 인증서
+*.pem
+*.p12
+
+# 광고 ID
+lib/ads/ad_ids.dart
 
 # Android Patch
 gen-external-apklibs
