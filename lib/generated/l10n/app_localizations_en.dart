@@ -33,6 +33,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get community => 'Blog';
 
   @override
+  String get discord => 'Discord';
+
+  @override
   String get name => 'Name';
 
   @override

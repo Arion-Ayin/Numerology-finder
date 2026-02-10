@@ -103,6 +103,59 @@ class _SettingScreenState extends State<SettingScreen> {
     );
   }
 
+  Future<void> _showUrlConfirmationDialog(
+    BuildContext context, {
+    required String url,
+    required String serviceNameKo,
+    required String serviceNameEn,
+  }) async {
+    final localeProvider = Provider.of<LocaleProvider>(context, listen: false);
+    final isKorean = localeProvider.locale?.languageCode == 'ko';
+
+    return showDialog<void>(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text(isKorean ? '$serviceNameKo로 이동' : 'Go to $serviceNameEn'),
+          content: (_isNativeAdLoaded && _nativeAd != null)
+              ? ConstrainedBox(
+                  constraints: const BoxConstraints(
+                    maxHeight: 300,
+                  ),
+                  child: AdWidget(ad: _nativeAd!),
+                )
+              : Text(isKorean ? '이 서비스로 이동하시겠습니까?' : 'Open this service in your browser?'),
+          actions: <Widget>[
+            TextButton(
+              child: Text(isKorean ? '취소' : 'Cancel'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+            TextButton(
+              child: Text(isKorean ? '이동' : 'Open'),
+              onPressed: () async {
+                Navigator.of(context).pop();
+                final Uri uri = Uri.parse(url);
+                if (await canLaunchUrl(uri)) {
+                  await launchUrl(uri, mode: LaunchMode.externalApplication);
+                } else {
+                  if (context.mounted) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text('Could not launch $url'),
+                      ),
+                    );
+                  }
+                }
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   // 이 함수는 화면에 무엇을 그릴지 정해줘요.
   @override
   Widget build(BuildContext context) {
@@ -110,6 +163,7 @@ class _SettingScreenState extends State<SettingScreen> {
     // 이 정보로 앱이 밝은 모드인지 어두운 모드인지 알 수 있어요.
     final themeProvider = Provider.of<ThemeProvider>(context);
     final localeProvider = Provider.of<LocaleProvider>(context);
+    final appLocalizations = AppLocalizations.of(context)!;
 
     // 화면 전체를 감싸는 큰 상자를 만들어요.
     return Container(
@@ -126,7 +180,7 @@ class _SettingScreenState extends State<SettingScreen> {
           // 다크 모드 설정 카드
           SettingCard(
             icon: Icons.wb_sunny_outlined,
-            title: AppLocalizations.of(context)!.darkMode,
+            title: appLocalizations.darkMode,
             iconColor: const Color(0xFFE91E63), // 핑크
             trailing: Switch(
               value: themeProvider.themeMode == ThemeMode.dark,
@@ -141,7 +195,7 @@ class _SettingScreenState extends State<SettingScreen> {
           // 언어 설정 카드
           SettingCard(
             icon: Icons.language,
-            title: AppLocalizations.of(context)!.language,
+            title: appLocalizations.language,
             iconColor: const Color(0xFF2196F3), // 블루
             trailing: Container(
               padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
@@ -167,7 +221,7 @@ class _SettingScreenState extends State<SettingScreen> {
                     localeProvider.setLocale(newLocale);
                     ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(
-                        content: Text(AppLocalizations.of(context)!.languageChanged(newLocale.languageCode == 'en' ? AppLocalizations.of(context)!.english : AppLocalizations.of(context)!.korean)),
+                        content: Text(appLocalizations.languageChanged(newLocale.languageCode == 'en' ? appLocalizations.english : appLocalizations.korean)),
                         duration: const Duration(seconds: 2),
                       ),
                     );
@@ -186,9 +240,31 @@ class _SettingScreenState extends State<SettingScreen> {
               ),
             ),
           ),
+
+              // 네 번째 설정 카드: 디스코드
+        SettingCard(
+                icon: Icons.headset, // 디스코드를 상징하는 헤드셋 아이콘
+                title: appLocalizations.discord, // '디스코드' 제목
+                iconColor: const Color(0xFF5865F2), // 디스코드 블러플
+                trailing: const Icon(
+                  Icons.arrow_forward_ios, // 오른쪽 화살표 아이콘
+                  size: 30,
+                  color: Colors.grey,
+                ),
+                onTap: () {
+                  // 카드 아무 곳이나 누르면 확인 대화상자를 띄웁니다.
+                  _showUrlConfirmationDialog(
+                    context,
+                    url: 'https://discord.gg/wMD29tUa',
+                    serviceNameKo: '디스코드',
+                    serviceNameEn: 'Discord',
+                  );
+                },
+              ),
+
           SettingCard(
             icon: Icons.article_outlined,
-            title: AppLocalizations.of(context)!.community,
+            title: appLocalizations.community,
             iconColor: const Color(0xFF4CAF50), // 그린
             onTap: () {
               _showAdAndNavigate('https://arion-ayin.github.io/');

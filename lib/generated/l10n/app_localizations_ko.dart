@@ -33,6 +33,9 @@ class AppLocalizationsKo extends AppLocalizations {
   String get community => '블로그';
 
   @override
+  String get discord => '디스코드';
+
+  @override
   String get name => '이름';
 
   @override

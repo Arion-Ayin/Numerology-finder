@@ -146,6 +146,12 @@ abstract class AppLocalizations {
   /// **'Blog'**
   String get community;
 
+  /// No description provided for @discord.
+  ///
+  /// In en, this message translates to:
+  /// **'Discord'**
+  String get discord;
+
   /// No description provided for @name.
   ///
   /// In en, this message translates to:

@@ -4,6 +4,8 @@ import 'package:provider/provider.dart';
 import 'package:numerology/services/history_service.dart';
 import 'package:numerology/services/ad_service.dart';
 import 'package:numerology/main.dart'; // InputScreen을 가져오기 위함
+import 'package:google_mobile_ads/google_mobile_ads.dart';
+import 'package:firebase_core/firebase_core.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -14,6 +16,7 @@ class SplashScreen extends StatefulWidget {
 
 class _SplashScreenState extends State<SplashScreen> {
   bool _isInitialized = false;
+  late AdService _adService;
 
   @override
   void didChangeDependencies() {
@@ -34,12 +37,30 @@ class _SplashScreenState extends State<SplashScreen> {
   }
 
   Future<void> _initializeApp() async {
-    // async gap 전에 서비스 참조 가져오기
-    final historyService = Provider.of<HistoryService>(context, listen: false);
-    final adService = Provider.of<AdService>(context, listen: false);
+    try {
+      // 1. Firebase 및 MobileAds 초기화 (병렬 처리)
+      await Future.wait([
+        Firebase.initializeApp(),
+        MobileAds.instance.initialize(),
+      ]);
 
-    // 1. HistoryService에서 기록 데이터를 백그라운드에서 로드합니다. (await 제거)
-    // 오류는 catchError로 처리하여 앱 충돌을 방지합니다.
+      if (!mounted) return;
+
+      // 2. AdService 초기화
+      _adService = AdService();
+      await _adService.initialize();
+
+      if (kDebugMode) {
+        print('Firebase & Ads 초기화 완료');
+      }
+    } catch (e) {
+      if (kDebugMode) {
+        print('Firebase/Ads 초기화 실패: $e');
+      }
+    }
+
+    // 3. HistoryService에서 기록 데이터를 백그라운드에서 로드
+    final historyService = Provider.of<HistoryService>(context, listen: false);
     historyService.loadHistory().timeout(
       const Duration(seconds: 3),
       onTimeout: () {
@@ -53,12 +74,12 @@ class _SplashScreenState extends State<SplashScreen> {
       }
     });
 
-    // 2. 스플래시 화면 최소 표시 시간 (1.5초) - 브랜딩 목적
+    // 4. 스플래시 화면 최소 표시 시간 (1.5초)
     await Future.delayed(const Duration(milliseconds: 1500));
     if (!mounted) return;
 
-    // 3. 미리 로드된 스플래시 광고 즉시 표시 (대기 없음)
-    final adShown = await adService.showSplashAd(
+    // 5. 미리 로드된 스플래시 광고 표시
+    final adShown = await _adService.showSplashAd(
       onAdDismissed: _navigateToMainScreen,
     );
 

@@ -1,5 +1,5 @@
 import 'package:google_mobile_ads/google_mobile_ads.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:numerology/services/preferences_service.dart';
 import 'package:numerology/ads/ad_ids.dart';
 
 /// 전면 광고 및 광고 정책을 관리하는 서비스 클래스입니다.
@@ -91,8 +91,7 @@ class AdService {
   Future<bool> showSplashAd({
     required Function onAdDismissed,
   }) async {
-    final prefs = await SharedPreferences.getInstance();
-    final lastAdShowTimeMillis = prefs.getInt(_lastSplashAdShowTimeKey) ?? 0;
+    final lastAdShowTimeMillis = PreferencesService.getInt(_lastSplashAdShowTimeKey) ?? 0;
     final currentTimeMillis = DateTime.now().millisecondsSinceEpoch;
 
     // 30분 (밀리초 단위)
@@ -109,7 +108,7 @@ class AdService {
     }
 
     // 광고 표시 시간 저장
-    await prefs.setInt(_lastSplashAdShowTimeKey, currentTimeMillis);
+    await PreferencesService.setInt(_lastSplashAdShowTimeKey, currentTimeMillis);
 
     _splashAd!.fullScreenContentCallback = FullScreenContentCallback(
       onAdDismissedFullScreenContent: (ad) {
@@ -131,13 +130,11 @@ class AdService {
   }
 
   Future<void> _loadCalculateClickCount() async {
-    final prefs = await SharedPreferences.getInstance();
-    _calculateClickCount = prefs.getInt(_clickCountKey) ?? 0;
+    _calculateClickCount = PreferencesService.getInt(_clickCountKey) ?? 0;
   }
 
   Future<void> _saveCalculateClickCount() async {
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.setInt(_clickCountKey, _calculateClickCount);
+    await PreferencesService.setInt(_clickCountKey, _calculateClickCount);
   }
 
   void dispose() {

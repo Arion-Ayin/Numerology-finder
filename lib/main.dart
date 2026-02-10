@@ -10,6 +10,7 @@ import 'package:numerology/theme_provider.dart'; // 앱의 테마(밝은 모드,
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:numerology/services/ad_service.dart';
 import 'package:numerology/services/history_service.dart';
+import 'package:numerology/services/preferences_service.dart';
 import 'package:numerology/screens/splash_screen.dart'; // 스플래시 화면 임포트
 import 'package:numerology/ads/ad_ids.dart';
 import 'package:flutter/services.dart';
@@ -19,12 +20,9 @@ import 'package:firebase_core/firebase_core.dart';
 // 앱이 처음 시작될 때 가장 먼저 실행되는 부분이에요.
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp();
-  await MobileAds.instance.initialize();
-
-  // AdService 초기화 및 스플래시 광고 미리 로드
-  final adService = AdService();
-  await adService.initialize();
+  
+  // PreferencesService만 초기화 (빠른 시작)
+  await PreferencesService.initialize();
 
   // 앱을 화면에 보여줘요.
   runApp(
@@ -37,8 +35,6 @@ void main() async {
         ChangeNotifierProvider(create: (context) => LocaleProvider()),
         // 'HistoryService'를 앱 전체에서 사용할 수 있게 합니다.
         ChangeNotifierProvider(create: (context) => HistoryService()),
-        // 'AdService'를 앱 전체에서 사용할 수 있게 합니다. (미리 로드된 광고 공유)
-        Provider<AdService>.value(value: adService),
       ],
       // 'MyApp'이라는 앱의 가장 큰 부분을 'ThemeProvider'와 'LocaleProvider'와 함께 실행해요.
       child: const MyApp(),
@@ -112,7 +108,7 @@ class _InputScreenState extends State<InputScreen> {
   bool _showResults = false;
 
   // 서비스 인스턴스
-  late final HistoryService _historyService;
+  final HistoryService _historyService = HistoryService();
   late final AdService _adService;
 
   // 네이티브 광고
@@ -124,11 +120,10 @@ class _InputScreenState extends State<InputScreen> {
   void initState() {
     super.initState(); // 부모 위젯의 시작 부분도 실행해줘요.
     // Provider를 통해 서비스 인스턴스를 가져옵니다.
-    _historyService = Provider.of<HistoryService>(context, listen: false);
     _historyService.loadHistory(); // 기록 불러오기
 
-    // Provider에서 AdService 가져오기 (main에서 이미 초기화됨)
-    _adService = Provider.of<AdService>(context, listen: false);
+    // AdService 인스턴스 생성 (스플래시에서 이미 초기화됨)
+    _adService = AdService();
     _loadNativeAd();
   }
 
