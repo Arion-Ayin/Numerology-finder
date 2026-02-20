@@ -1,12 +1,18 @@
+import 'dart:async';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:numerology/services/preferences_service.dart';
 import 'package:numerology/ads/ad_ids.dart';
 
 /// 전면 광고 및 광고 정책을 관리하는 서비스 클래스입니다.
 class AdService {
+  // 싱글톤 패턴: 앱 전체에서 하나의 인스턴스만 사용합니다.
+  static final AdService _instance = AdService._internal();
+  factory AdService() => _instance;
+  AdService._internal();
+
   InterstitialAd? _interstitialAd;
   InterstitialAd? _splashAd; // 스플래시용 미리 로드된 광고
-  bool _isSplashAdLoading = false;
+  Future<void>? _splashAdFuture; // 현재 진행 중인 스플래시 광고 로딩 Future
   int _calculateClickCount = 0;
   final int _adFrequency = 7; // 광고 표시 빈도 (7번 클릭마다)
 
@@ -15,15 +21,23 @@ class AdService {
 
   /// 서비스 초기화 시 광고와 클릭 횟수를 로드합니다.
   Future<void> initialize() async {
+
     await _loadCalculateClickCount();
     _loadInterstitialAd();
-    preloadSplashAd(); // 스플래시 광고 미리 로드
+    preloadSplashAd(); // 비동기로 시작 (스플래시 화면에서 대기)
   }
 
   /// 스플래시 광고를 미리 로드합니다. (앱 시작 시 호출)
-  void preloadSplashAd() {
-    if (_isSplashAdLoading || _splashAd != null) return;
-    _isSplashAdLoading = true;
+  /// Future를 반환하여 광고 로드 완료를 기다릴 수 있습니다.
+  /// 이미 로딩 중이면 같은 Future를 반환합니다.
+  Future<void> preloadSplashAd() {
+    // 이미 로드 완료
+    if (_splashAd != null) return Future.value();
+    // 이미 로딩 중이면 같은 Future 반환
+    if (_splashAdFuture != null) return _splashAdFuture!;
+
+    final completer = Completer<void>();
+    _splashAdFuture = completer.future;
 
     InterstitialAd.load(
       adUnitId: AdIds.interstitialAdUnitId,
@@ -31,14 +45,18 @@ class AdService {
       adLoadCallback: InterstitialAdLoadCallback(
         onAdLoaded: (ad) {
           _splashAd = ad;
-          _isSplashAdLoading = false;
+          _splashAdFuture = null;
+          completer.complete();
         },
         onAdFailedToLoad: (error) {
           _splashAd = null;
-          _isSplashAdLoading = false;
+          _splashAdFuture = null;
+          completer.complete(); // 실패해도 완료 처리
         },
       ),
     );
+
+    return completer.future;
   }
 
   /// 스플래시 광고가 로드되었는지 확인합니다.

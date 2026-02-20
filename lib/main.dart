@@ -15,6 +15,7 @@ import 'package:numerology/screens/splash_screen.dart'; // 스플래시 화면 �
 import 'package:numerology/ads/ad_ids.dart';
 import 'package:flutter/services.dart';
 import 'package:in_app_review/in_app_review.dart';
+import 'package:in_app_update/in_app_update.dart';
 import 'package:firebase_core/firebase_core.dart';
 
 // 앱이 처음 시작될 때 가장 먼저 실행되는 부분이에요.
@@ -108,7 +109,6 @@ class _InputScreenState extends State<InputScreen> {
   bool _showResults = false;
 
   // 서비스 인스턴스
-  final HistoryService _historyService = HistoryService();
   late final AdService _adService;
 
   // 네이티브 광고
@@ -120,11 +120,41 @@ class _InputScreenState extends State<InputScreen> {
   void initState() {
     super.initState(); // 부모 위젯의 시작 부분도 실행해줘요.
     // Provider를 통해 서비스 인스턴스를 가져옵니다.
-    _historyService.loadHistory(); // 기록 불러오기
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      context.read<HistoryService>().loadHistory(); // 기록 불러오기
+    });
 
-    // AdService 인스턴스 생성 (스플래시에서 이미 초기화됨)
+    // AdService 싱글톤 인스턴스 (스플래시에서 이미 초기화됨)
     _adService = AdService();
     _loadNativeAd();
+    _checkForUpdate();
+  }
+
+  /// Google Play 스토어에서 업데이트가 있는지 확인하고, Flexible 업데이트를 진행합니다.
+  Future<void> _checkForUpdate() async {
+    try {
+      final updateInfo = await InAppUpdate.checkForUpdate();
+      if (updateInfo.updateAvailability == UpdateAvailability.updateAvailable &&
+          updateInfo.flexibleUpdateAllowed) {
+        // 백그라운드에서 다운로드 시작
+        await InAppUpdate.startFlexibleUpdate();
+        // 다운로드 완료 후 설치 안내
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: const Text('업데이트가 준비되었습니다.'),
+              action: SnackBarAction(
+                label: '설치',
+                onPressed: () => InAppUpdate.completeFlexibleUpdate(),
+              ),
+              duration: const Duration(seconds: 10),
+            ),
+          );
+        }
+      }
+    } catch (_) {
+      // Play Store 미연결 또는 에뮬레이터 등에서는 무시
+    }
   }
 
   void _loadNativeAd() {
@@ -161,7 +191,7 @@ class _InputScreenState extends State<InputScreen> {
       'name': _nameController.text,
       'date': _selectedDate?.toIso8601String() ?? '',
     };
-    _historyService.addOrUpdateEntry(newEntry);
+    context.read<HistoryService>().addOrUpdateEntry(newEntry);
 
     setState(() {
       _showResults = true;
@@ -235,7 +265,7 @@ class _InputScreenState extends State<InputScreen> {
   // 기록 목록에서 항목을 눌렀을 때 실행되는 함수예요. 선택한 기록으로 입력 칸을 채우고, 기록을 맨 위로 올립니다.
   void _applyHistory(Map<String, String> entry) {
     // 화면의 내용을 바꿔줘요.
-    _historyService.addOrUpdateEntry(entry); // 기록을 업데이트 (최상단으로 이동)
+    context.read<HistoryService>().addOrUpdateEntry(entry); // 기록을 업데이트 (최상단으로 이동)
     setState(() {
       // 선택한 기록의 이름을 이름 입력 칸에 넣어요.
       _nameController.text = entry['name']!;
@@ -442,7 +472,7 @@ class _InputScreenState extends State<InputScreen> {
                       // 오른쪽 끝에 입체적인 'X' 버튼을 추가합니다.
                       trailing: InkWell(
                         onTap:
-                            () => _historyService.deleteEntry(
+                            () => context.read<HistoryService>().deleteEntry(
                               index,
                             ), // 누르면 삭제 함수 실행
                         borderRadius: BorderRadius.circular(

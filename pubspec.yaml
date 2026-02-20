@@ -1,14 +1,14 @@
-name: numerology
+name: numerology 
 description: "A new Flutter project."
 
 publish_to: 'none'
 
-version: 1.2.0+29
+version: 1.2.0+32
 
 environment:
   sdk: '>=3.7.2 <4.0.0' # SDK 버전 수정
 
-dependencies:
+dependencies: 
   flutter:
     sdk: flutter
   flutter_localizations:
@@ -28,6 +28,7 @@ dependencies:
   google_mobile_ads: ^6.0.0
   upgrader: ^12.2.0
   in_app_review: ^2.0.9
+  in_app_update: ^4.2.3
   firebase_core: ^4.4.0
   firebase_analytics: ^12.1.1
 

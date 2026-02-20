@@ -3,7 +3,8 @@
     "allow": [
       "Bash(./gradlew:*)",
       "Bash(dir:*)",
-      "Bash(git push:*)"
+      "Bash(git push:*)",
+      "Bash(wc:*)"
     ]
   }
 }

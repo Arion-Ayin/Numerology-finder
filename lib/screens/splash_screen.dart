@@ -74,9 +74,19 @@ class _SplashScreenState extends State<SplashScreen> {
       }
     });
 
-    // 4. 스플래시 화면 최소 표시 시간 (1.5초)
-    await Future.delayed(const Duration(milliseconds: 1500));
+    // 4. 스플래시 최소 1.5초 표시 + 광고 로드를 병렬로 대기 (최대 5초)
+    await Future.wait([
+      Future.delayed(const Duration(milliseconds: 1500)),
+      _adService.preloadSplashAd().timeout(
+        const Duration(seconds: 5),
+        onTimeout: () {},
+      ),
+    ]);
     if (!mounted) return;
+
+    if (kDebugMode) {
+      print('스플래시 광고 준비 상태: ${_adService.isSplashAdReady}');
+    }
 
     // 5. 미리 로드된 스플래시 광고 표시
     final adShown = await _adService.showSplashAd(
