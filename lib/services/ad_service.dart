@@ -14,10 +14,10 @@ class AdService {
   InterstitialAd? _splashAd; // 스플래시용 미리 로드된 광고
   Future<void>? _splashAdFuture; // 현재 진행 중인 스플래시 광고 로딩 Future
   int _calculateClickCount = 0;
-  final int _adFrequency = 7; // 광고 표시 빈도 (7번 클릭마다)
+  final int _adFrequency = 30; // 광고 표시 빈도 (30번 클릭마다)
 
   static const _clickCountKey = 'calculateClickCount';
-  static const _lastSplashAdShowTimeKey = 'lastSplashAdShowTime';
+  static const _appExitTimeKey = 'appExitTime';
 
   /// 서비스 초기화 시 광고와 클릭 횟수를 로드합니다.
   Future<void> initialize() async {
@@ -104,29 +104,31 @@ class AdService {
     return false; // 광고가 표시되지 않음
   }
 
+  /// 앱 이탈 시간을 저장합니다.
+  Future<void> saveAppExitTime() async {
+    await PreferencesService.setInt(_appExitTimeKey, DateTime.now().millisecondsSinceEpoch);
+  }
+
   /// 미리 로드된 스플래시 광고를 즉시 표시합니다.
   /// 광고가 표시되면 true, 표시되지 않으면 false를 반환합니다.
   Future<bool> showSplashAd({
     required Function onAdDismissed,
   }) async {
-    final lastAdShowTimeMillis = PreferencesService.getInt(_lastSplashAdShowTimeKey) ?? 0;
+    final appExitTimeMillis = PreferencesService.getInt(_appExitTimeKey) ?? 0;
     final currentTimeMillis = DateTime.now().millisecondsSinceEpoch;
 
     // 30분 (밀리초 단위)
     const thirtyMinutesInMillis = 30 * 60 * 1000;
 
-    // 30분 쿨다운 체크
-    if (currentTimeMillis - lastAdShowTimeMillis < thirtyMinutesInMillis) {
-      return false;
+    // 앱 이탈 후 30분 이내에 돌아왔는지 체크
+    if (currentTimeMillis - appExitTimeMillis < thirtyMinutesInMillis) {
+      return false; // 광고를 보여주지 않음
     }
 
     // 광고가 로드되어 있지 않으면 false 반환 (대기 없이 즉시 진행)
     if (_splashAd == null) {
       return false;
     }
-
-    // 광고 표시 시간 저장
-    await PreferencesService.setInt(_lastSplashAdShowTimeKey, currentTimeMillis);
 
     _splashAd!.fullScreenContentCallback = FullScreenContentCallback(
       onAdDismissedFullScreenContent: (ad) {

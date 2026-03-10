@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:numerology/locale_provider.dart';
-import 'package:numerology/screens/info_screen.dart';
+import 'package:numerology/screens/developer_notes_screen.dart';
 import 'package:numerology/screens/setting_screen.dart';
 import 'package:provider/provider.dart';
 import 'package:upgrader/upgrader.dart';

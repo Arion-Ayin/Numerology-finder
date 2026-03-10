@@ -42,6 +42,20 @@ const Map<String, List<String>> _compositeConsonants = {
   'ㅀ': ['ㄹ', 'ㅎ'], 'ㅄ': ['ㅂ', 'ㅅ'],
 };
 
+const Map<String, int> _EnglishLetterToNumberMap = {
+  'A': 1, 'J': 10, 'S': 19,
+  'B': 2, 'K': 11, 'T': 20,
+  'C': 3, 'L': 12, 'U': 21,
+  'D': 4, 'M': 13, 'V': 22,
+  'E': 5, 'N': 14, 'W': 23,
+  'F': 6, 'O': 15, 'X': 24,
+  'G': 7, 'P': 16, 'Y': 25,
+  'H': 8, 'Q': 17, 'Z': 26,
+  'I': 9, 'R': 18,
+};
+
+
+
 
 class NumerologyCalculator {
   // 숫자를 한 자리로 줄이는 핵심 함수 (마스터 수는 예외 처리)

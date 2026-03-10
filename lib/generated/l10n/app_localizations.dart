@@ -125,7 +125,7 @@ abstract class AppLocalizations {
   /// No description provided for @language.
   ///
   /// In en, this message translates to:
-  /// **'Language'**
+  /// **'Language Settings'**
   String get language;
 
   /// No description provided for @korean.
@@ -146,11 +146,11 @@ abstract class AppLocalizations {
   /// **'Blog'**
   String get community;
 
-  /// No description provided for @discord.
+  /// No description provided for @openKakaotalk.
   ///
   /// In en, this message translates to:
-  /// **'Discord'**
-  String get discord;
+  /// **'Open Kakaotalk'**
+  String get openKakaotalk;
 
   /// No description provided for @name.
   ///
@@ -299,7 +299,7 @@ abstract class AppLocalizations {
   /// No description provided for @copyrightText.
   ///
   /// In en, this message translates to:
-  /// **'© 2025 Arion Ayin. All rights reserved.'**
+  /// **'© Arion Ayin. All rights reserved.'**
   String get copyrightText;
 
   /// No description provided for @languageChanged.
@@ -319,6 +319,42 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Please enter your name here'**
   String get nameHint;
+
+  /// No description provided for @infoScreenTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Developer Notes'**
+  String get infoScreenTitle;
+
+  /// No description provided for @btnReview.
+  ///
+  /// In en, this message translates to:
+  /// **'Leave a Review'**
+  String get btnReview;
+
+  /// No description provided for @btnContact.
+  ///
+  /// In en, this message translates to:
+  /// **'Contact Developer'**
+  String get btnContact;
+
+  /// No description provided for @noPostsFound.
+  ///
+  /// In en, this message translates to:
+  /// **'No posts found.'**
+  String get noPostsFound;
+
+  /// No description provided for @msgEmailCopied.
+  ///
+  /// In en, this message translates to:
+  /// **'Email address copied to clipboard.'**
+  String get msgEmailCopied;
+
+  /// No description provided for @msgAppNotFound.
+  ///
+  /// In en, this message translates to:
+  /// **'Could not open the app. Please find it in the store.'**
+  String get msgAppNotFound;
 }
 
 class _AppLocalizationsDelegate

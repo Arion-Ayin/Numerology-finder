@@ -21,7 +21,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get darkMode => 'Dark Mode';
 
   @override
-  String get language => 'Language';
+  String get language => 'Language Settings';
 
   @override
   String get korean => 'Korean';
@@ -33,7 +33,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get community => 'Blog';
 
   @override
-  String get discord => 'Discord';
+  String get openKakaotalk => 'Open Kakaotalk';
 
   @override
   String get name => 'Name';
@@ -111,7 +111,7 @@ class AppLocalizationsEn extends AppLocalizations {
       '• With the hope that anyone can easily access this information.';
 
   @override
-  String get copyrightText => '© 2025 Arion Ayin. All rights reserved.';
+  String get copyrightText => '© Arion Ayin. All rights reserved.';
 
   @override
   String languageChanged(Object languageName) {
@@ -123,4 +123,23 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get nameHint => 'Please enter your name here';
+
+  @override
+  String get infoScreenTitle => 'Developer Notes';
+
+  @override
+  String get btnReview => 'Leave a Review';
+
+  @override
+  String get btnContact => 'Contact Developer';
+
+  @override
+  String get noPostsFound => 'No posts found.';
+
+  @override
+  String get msgEmailCopied => 'Email address copied to clipboard.';
+
+  @override
+  String get msgAppNotFound =>
+      'Could not open the app. Please find it in the store.';
 }

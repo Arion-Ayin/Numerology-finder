@@ -101,6 +101,7 @@ class InputScreen extends StatefulWidget {
 
 // 'InputScreen'의 실제 내용과 동작을 관리하는 부분이에요.
 class _InputScreenState extends State<InputScreen> {
+  late final AppLifecycleListener _lifecycleListener;
   // 이름을 입력받는 칸을 관리하는 도구예요.
   final _nameController = TextEditingController();
   // 사용자가 선택한 생년월일을 저장하는 곳이에요. 아직 선택하지 않았으면 비어있어요.
@@ -119,15 +120,28 @@ class _InputScreenState extends State<InputScreen> {
   @override
   void initState() {
     super.initState(); // 부모 위젯의 시작 부분도 실행해줘요.
+    
+    _adService = AdService();
+
+    // 앱 생명주기 리스너 초기화
+    _lifecycleListener = AppLifecycleListener(
+      onStateChange: _onLifecycleStateChange,
+    );
+
     // Provider를 통해 서비스 인스턴스를 가져옵니다.
     WidgetsBinding.instance.addPostFrameCallback((_) {
       context.read<HistoryService>().loadHistory(); // 기록 불러오기
     });
 
-    // AdService 싱글톤 인스턴스 (스플래시에서 이미 초기화됨)
-    _adService = AdService();
     _loadNativeAd();
     _checkForUpdate();
+  }
+
+  // 앱 생명주기 변경 감지
+  void _onLifecycleStateChange(AppLifecycleState state) {
+    if (state == AppLifecycleState.paused || state == AppLifecycleState.detached) {
+      _adService.saveAppExitTime();
+    }
   }
 
   /// Google Play 스토어에서 업데이트가 있는지 확인하고, Flexible 업데이트를 진행합니다.
@@ -180,6 +194,7 @@ class _InputScreenState extends State<InputScreen> {
 
   @override
   void dispose() {
+    _lifecycleListener.dispose();
     _nameController.dispose();
     _nativeAd?.dispose();
     super.dispose();

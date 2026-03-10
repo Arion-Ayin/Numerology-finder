@@ -179,7 +179,7 @@ class _SettingScreenState extends State<SettingScreen> {
           const SizedBox(height: 20),
           // 다크 모드 설정 카드
           SettingCard(
-            icon: Icons.wb_sunny_outlined,
+            icon: Icons.wb_sunny, // 햇빛 아이콘
             title: appLocalizations.darkMode,
             iconColor: const Color(0xFFE91E63), // 핑크
             trailing: Switch(
@@ -199,21 +199,15 @@ class _SettingScreenState extends State<SettingScreen> {
             iconColor: const Color(0xFF2196F3), // 블루
             trailing: Container(
               padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
-              decoration: BoxDecoration(
-                border: Border.all(
-                  color: Theme.of(context).colorScheme.secondary.withValues(alpha: 0.3),
-                ),
-                borderRadius: BorderRadius.circular(8),
-              ),
               child: DropdownButton<Locale>(
                 value: localeProvider.locale,
-                icon: Icon(
+                icon: const Icon(
                   Icons.arrow_drop_down,
-                  color: Theme.of(context).colorScheme.secondary,
+                  color: Colors.black,
                 ),
                 underline: const SizedBox(),
-                style: TextStyle(
-                  color: Theme.of(context).textTheme.bodyLarge?.color,
+                style: const TextStyle(
+                  color: Colors.black,
                   fontSize: 14,
                 ),
                 onChanged: (Locale? newLocale) {
@@ -241,11 +235,11 @@ class _SettingScreenState extends State<SettingScreen> {
             ),
           ),
 
-              // 네 번째 설정 카드: 디스코드
+          // 네 번째 설정 카드: 오픈카톡
         SettingCard(
-                icon: Icons.headset, // 디스코드를 상징하는 헤드셋 아이콘
-                title: appLocalizations.discord, // '디스코드' 제목
-                iconColor: const Color(0xFF5865F2), // 디스코드 블러플
+                icon: Icons.chat_bubble, // 오픈카톡을 상징하는 말풍선 아이콘
+                title: appLocalizations.openKakaotalk, // '오픈카톡' 제목
+                iconColor: const Color(0xFFFEE500), // 카카오톡 노랑
                 trailing: const Icon(
                   Icons.arrow_forward_ios, // 오른쪽 화살표 아이콘
                   size: 30,
@@ -255,9 +249,9 @@ class _SettingScreenState extends State<SettingScreen> {
                   // 카드 아무 곳이나 누르면 확인 대화상자를 띄웁니다.
                   _showUrlConfirmationDialog(
                     context,
-                    url: 'https://discord.gg/wMD29tUa',
-                    serviceNameKo: '디스코드',
-                    serviceNameEn: 'Discord',
+                    url: 'https://open.kakao.com/o/gIzVMFji',
+                    serviceNameKo: '오픈카톡',
+                    serviceNameEn: 'Open Kakaotalk',
                   );
                 },
               ),

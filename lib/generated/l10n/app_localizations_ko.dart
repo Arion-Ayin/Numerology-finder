@@ -21,7 +21,7 @@ class AppLocalizationsKo extends AppLocalizations {
   String get darkMode => '다크 모드';
 
   @override
-  String get language => '언어';
+  String get language => '언어 설정';
 
   @override
   String get korean => '한국어';
@@ -33,7 +33,7 @@ class AppLocalizationsKo extends AppLocalizations {
   String get community => '블로그';
 
   @override
-  String get discord => '디스코드';
+  String get openKakaotalk => '오픈카톡';
 
   @override
   String get name => '이름';
@@ -109,7 +109,7 @@ class AppLocalizationsKo extends AppLocalizations {
   String get whyDidWeMakeThisAppSubtitle => '• 누구나 손쉽게 이 정보들에 접근 가능하면 좋겠다는 마음에';
 
   @override
-  String get copyrightText => '© 2025 Arion Ayin. All rights reserved.';
+  String get copyrightText => '© Arion Ayin. All rights reserved.';
 
   @override
   String languageChanged(Object languageName) {
@@ -121,4 +121,22 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get nameHint => '이름을 여기에 입력해주세요';
+
+  @override
+  String get infoScreenTitle => '개발자 노트';
+
+  @override
+  String get btnReview => '리뷰 남기러 가기';
+
+  @override
+  String get btnContact => '개발자에게 한마디';
+
+  @override
+  String get noPostsFound => '등록된 게시글이 없습니다.';
+
+  @override
+  String get msgEmailCopied => '클립보드에 이메일 주소가 복사되었어요.';
+
+  @override
+  String get msgAppNotFound => '앱을 열 수 없습니다. 스토어에서 앱을 찾아보세요.';
 }
