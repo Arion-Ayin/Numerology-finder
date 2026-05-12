@@ -509,6 +509,14 @@ class NumerologyCalculator {
     return Colors.white;
   }
 
+  // 연령진동수 계산 함수
+  int calculateAgeVibrationNumber(DateTime birthDate) {
+    final int currentYear = DateTime.now().year;
+    int age = currentYear - birthDate.year; // 만나이 기준 연도 차이
+    int sumAge = age + (age - 1); // 생일 기준 앞뒤 나이 합
+    return _reduceToSingleDigit(sumAge); // 단일 숫자로 축약
+  }
+
   // 절정수(Pinnacle) 및 도전수(Challenge) 계산 함수
   List<Map<String, dynamic>> calculatePinnacleAndChallenge(
     DateTime birthDate,
@@ -574,6 +582,34 @@ class NumerologyCalculator {
         'age': age4,
         'pinnacle': pin4,
         'challenge': chal4,
+      },
+    ];
+  }
+
+  // 대주기(Life Cycles) 계산 함수
+  List<Map<String, dynamic>> calculateLifeCycles(DateTime birthDate) {
+    int cycle1 = _reduceToSingleDigit(birthDate.month);
+    int cycle2 = _reduceToSingleDigit(birthDate.day);
+    int cycle3 = _reduceToSingleDigit(birthDate.year);
+
+    return [
+      {
+        'phaseKo': '1단계',
+        'phaseEn': 'Phase 1',
+        'age': '0 ~ 30',
+        'cycleNumber': cycle1,
+      },
+      {
+        'phaseKo': '2단계',
+        'phaseEn': 'Phase 2',
+        'age': '31 ~ 60',
+        'cycleNumber': cycle2,
+      },
+      {
+        'phaseKo': '3단계',
+        'phaseEn': 'Phase 3',
+        'age': '60 ~ 90',
+        'cycleNumber': cycle3,
       },
     ];
   }
