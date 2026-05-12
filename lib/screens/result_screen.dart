@@ -25,6 +25,7 @@ class ResultScreen extends StatelessWidget {
     int? birthdayNumber;
     List<int>? monthNumbers;
     int? reducedPersonalYear;
+    List<Map<String, dynamic>>? pinnacleChallengeList;
 
     if (birthDate != null) {
       lifePathNumber = calculator.calculateLifePathNumber(birthDate!);
@@ -35,6 +36,10 @@ class ResultScreen extends StatelessWidget {
       birthdayNumber = calculator.calculateBirthdayNumber(birthDate!);
       monthNumbers = calculator.calculateAllPersonalMonths(birthDate!);
       reducedPersonalYear = calculator.calculatePersonalYearNumber(birthDate!);
+      pinnacleChallengeList = calculator.calculatePinnacleAndChallenge(
+        birthDate!,
+        lifePathNumber,
+      );
     }
 
     final String languageCode = Localizations.localeOf(context).languageCode;
@@ -102,6 +107,31 @@ class ResultScreen extends StatelessWidget {
               ),
             ),
           ],
+        ),
+      );
+    }
+
+    Widget buildTableCell(
+      String text, {
+      bool isHighlight = false,
+      bool isHeader = false,
+    }) {
+      return Padding(
+        padding: EdgeInsets.symmetric(vertical: isHeader ? 10.0 : 12.0),
+        child: Text(
+          text,
+          textAlign: TextAlign.center,
+          style: TextStyle(
+            fontSize: isHeader ? 13 : 14,
+            fontWeight:
+                isHeader || isHighlight ? FontWeight.bold : FontWeight.normal,
+            color:
+                isHighlight
+                    ? Theme.of(context).colorScheme.secondary
+                    : (isHeader
+                        ? Theme.of(context).textTheme.bodyMedium?.color
+                        : Theme.of(context).textTheme.bodyLarge?.color),
+          ),
         ),
       );
     }
@@ -308,6 +338,94 @@ class ResultScreen extends StatelessWidget {
                   ),
               ],
             ),
+
+            if (birthDate != null && pinnacleChallengeList != null) ...[
+              const SizedBox(height: 24),
+              Text(
+                languageCode == 'ko' ? '절정수 및 도전수' : 'Pinnacles & Challenges',
+                style: TextStyle(
+                  color: Theme.of(context).colorScheme.secondary,
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              const SizedBox(height: 16),
+              Container(
+                padding: const EdgeInsets.all(16),
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
+                    colors: NumerologyThemes.cardGradient(isDark),
+                  ),
+                  borderRadius: BorderRadius.circular(20),
+                  boxShadow: [NumerologyThemes.cardShadow(isDark)],
+                ),
+                child: Table(
+                  defaultVerticalAlignment: TableCellVerticalAlignment.middle,
+                  columnWidths: const {
+                    0: FlexColumnWidth(1.2), // 기간
+                    1: FlexColumnWidth(1.0), // 나이
+                    2: FlexColumnWidth(1.2), // 절정수
+                    3: FlexColumnWidth(1.2), // 도전수
+                  },
+                  children: [
+                    TableRow(
+                      decoration: BoxDecoration(
+                        border: Border(
+                          bottom: BorderSide(
+                            color:
+                                Theme.of(context).dividerTheme.color ??
+                                Colors.grey.withOpacity(0.2),
+                            width: 1,
+                          ),
+                        ),
+                      ),
+                      children: [
+                        buildTableCell(
+                          languageCode == 'ko' ? '기간' : 'Period',
+                          isHeader: true,
+                        ),
+                        buildTableCell(
+                          languageCode == 'ko' ? '나이' : 'Age',
+                          isHeader: true,
+                        ),
+                        buildTableCell(
+                          languageCode == 'ko' ? '절정수' : 'Pin.',
+                          isHeader: true,
+                          isHighlight: true,
+                        ),
+                        buildTableCell(
+                          languageCode == 'ko' ? '도전수' : 'Chal.',
+                          isHeader: true,
+                          isHighlight: true,
+                        ),
+                      ],
+                    ),
+                    ...pinnacleChallengeList.map((data) {
+                      return TableRow(
+                        children: [
+                          buildTableCell(
+                            languageCode == 'ko'
+                                ? data['phaseKo']
+                                : data['phaseEn'],
+                          ),
+                          buildTableCell('${data['age']}'),
+                          buildTableCell(
+                            '${data['pinnacle']}',
+                            isHighlight: true,
+                          ),
+                          buildTableCell(
+                            '${data['challenge']}',
+                            isHighlight: true,
+                          ),
+                        ],
+                      );
+                    }).toList(),
+                  ],
+                ),
+              ),
+            ],
 
             if (birthDate != null) ...[
               const SizedBox(height: 24),

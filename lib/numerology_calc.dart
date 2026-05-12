@@ -508,4 +508,73 @@ class NumerologyCalculator {
     }
     return Colors.white;
   }
+
+  // 절정수(Pinnacle) 및 도전수(Challenge) 계산 함수
+  List<Map<String, dynamic>> calculatePinnacleAndChallenge(
+    DateTime birthDate,
+    int lifePathNumber,
+  ) {
+    // 생년, 월, 일을 각각 한 자리 숫자로 먼저 축약합니다.
+    int rMonth = _reduceToSingleDigit(birthDate.month);
+    int rDay = _reduceToSingleDigit(birthDate.day);
+    int rYear = _reduceToSingleDigit(birthDate.year);
+
+    // 절정수 계산 (더하기 후 단일 숫자로 축약)
+    int pin1 = _reduceToSingleDigit(rMonth + rDay);
+    int pin2 = _reduceToSingleDigit(rDay + rYear);
+    int pin3 = _reduceToSingleDigit(pin1 + pin2);
+    int pin4 = _reduceToSingleDigit(rMonth + rYear);
+
+    // 도전수 계산 (절댓값 차이, 도전수는 이미 8 이하이므로 축약 불필요)
+    int chal1 = (rMonth - rDay).abs();
+    int chal2 = (rDay - rYear).abs();
+    int chal3 = (chal1 - chal2).abs();
+    int chal4 = (rMonth - rYear).abs();
+
+    // 단계별 나이 기준 계산
+    int reducedLifePath = _reduceToSingleDigit(lifePathNumber);
+    int age1 = 36 - reducedLifePath;
+    int age2 = age1 + 9;
+    int age3 = age2 + 9;
+    int age4 = age3 + 9;
+
+    return [
+      {
+        'phaseKo': '1단계',
+        'phaseEn': 'Phase 1',
+        'formulaKo': '36-인생여정수',
+        'formulaEn': '36-Life Path',
+        'age': age1,
+        'pinnacle': pin1,
+        'challenge': chal1,
+      },
+      {
+        'phaseKo': '2단계',
+        'phaseEn': 'Phase 2',
+        'formulaKo': '+9',
+        'formulaEn': '+9',
+        'age': age2,
+        'pinnacle': pin2,
+        'challenge': chal2,
+      },
+      {
+        'phaseKo': '3단계',
+        'phaseEn': 'Phase 3',
+        'formulaKo': '+9',
+        'formulaEn': '+9',
+        'age': age3,
+        'pinnacle': pin3,
+        'challenge': chal3,
+      },
+      {
+        'phaseKo': '4단계',
+        'phaseEn': 'Phase 4',
+        'formulaKo': '+9',
+        'formulaEn': '+9',
+        'age': age4,
+        'pinnacle': pin4,
+        'challenge': chal4,
+      },
+    ];
+  }
 }
