@@ -165,7 +165,7 @@ class ResultScreen extends StatelessWidget {
               '당신의 행운 숫자',
               style: TextStyle(
                 color: Theme.of(context).colorScheme.secondary,
-                fontSize: 18,
+                fontSize: 20,
                 fontWeight: FontWeight.bold,
               ),
             ),
