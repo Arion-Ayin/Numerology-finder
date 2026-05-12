@@ -44,8 +44,18 @@ class ResultScreen extends StatelessWidget {
         return '$month월수';
       } else {
         const monthAbbreviations = [
-          'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
-          'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec',
+          'Jan',
+          'Feb',
+          'Mar',
+          'Apr',
+          'May',
+          'Jun',
+          'Jul',
+          'Aug',
+          'Sep',
+          'Oct',
+          'Nov',
+          'Dec',
         ];
         return monthAbbreviations[month - 1];
       }
@@ -55,7 +65,8 @@ class ResultScreen extends StatelessWidget {
 
     Widget buildNumberCard(String label, String value, {Color? accentColor}) {
       return Container(
-        width: (MediaQuery.of(context).size.width / 3) - 22, // 3열 레이아웃을 위한 너비 조정
+        width:
+            (MediaQuery.of(context).size.width / 3) - 22, // 3열 레이아웃을 위한 너비 조정
         padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 12),
         decoration: BoxDecoration(
           gradient: LinearGradient(
@@ -73,8 +84,9 @@ class ResultScreen extends StatelessWidget {
             Text(
               label,
               style: TextStyle(
-                color:
-                    Theme.of(context).textTheme.bodyLarge?.color?.withOpacity(0.8),
+                color: Theme.of(
+                  context,
+                ).textTheme.bodyLarge?.color?.withOpacity(0.8),
                 fontSize: 12,
                 fontWeight: FontWeight.w500,
               ),
@@ -102,7 +114,7 @@ class ResultScreen extends StatelessWidget {
           children: <Widget>[
             // 프로필 카드
             Container(
-              padding: const EdgeInsets.all(20),
+              padding: const EdgeInsets.all(15),
               decoration: BoxDecoration(
                 gradient: LinearGradient(
                   begin: Alignment.topLeft,
@@ -118,8 +130,9 @@ class ResultScreen extends StatelessWidget {
                     width: 50,
                     height: 50,
                     decoration: BoxDecoration(
-                      color:
-                          Theme.of(context).colorScheme.secondary.withOpacity(0.15),
+                      color: Theme.of(
+                        context,
+                      ).colorScheme.secondary.withOpacity(0.15),
                       borderRadius: BorderRadius.circular(15),
                     ),
                     child: Icon(
@@ -136,7 +149,8 @@ class ResultScreen extends StatelessWidget {
                         Text(
                           name,
                           style: TextStyle(
-                            color: Theme.of(context).textTheme.titleLarge?.color,
+                            color:
+                                Theme.of(context).textTheme.titleLarge?.color,
                             fontSize: 20,
                             fontWeight: FontWeight.bold,
                           ),
@@ -147,7 +161,8 @@ class ResultScreen extends StatelessWidget {
                           Text(
                             birthDate!.toLocal().toString().split(' ')[0],
                             style: TextStyle(
-                              color: Theme.of(context).textTheme.bodyMedium?.color,
+                              color:
+                                  Theme.of(context).textTheme.bodyMedium?.color,
                               fontSize: 14,
                             ),
                           ),
@@ -158,7 +173,7 @@ class ResultScreen extends StatelessWidget {
                 ],
               ),
             ),
-            const SizedBox(height: 24),
+            const SizedBox(height: 14),
 
             // 당신의 행운 숫자 섹션
             Text(
@@ -181,7 +196,9 @@ class ResultScreen extends StatelessWidget {
                 ),
                 borderRadius: BorderRadius.circular(16),
                 border: Border.all(
-                  color: Theme.of(context).colorScheme.secondary.withOpacity(0.3),
+                  color: Theme.of(
+                    context,
+                  ).colorScheme.secondary.withOpacity(0.3),
                   width: 1,
                 ),
               ),
@@ -189,47 +206,62 @@ class ResultScreen extends StatelessWidget {
                 spacing: 12,
                 runSpacing: 12,
                 alignment: WrapAlignment.center,
-                children: calculator.getNameDecomposition(name).map((syllableList) {
-                  return Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
-                    decoration: BoxDecoration(
-                      color: Theme.of(context).colorScheme.secondary.withOpacity(0.1),
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: syllableList.map((item) {
-                        return Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 6),
-                          child: Column(
-                            children: [
-                              Text(
-                                item['char'],
-                                style: TextStyle(
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.bold,
-                                  color: Theme.of(context).textTheme.bodyLarge?.color,
-                                ),
-                              ),
-                              const SizedBox(height: 4),
-                              Text(
-                                '${item['value']}',
-                                style: TextStyle(
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.w600,
-                                  color: Theme.of(context).colorScheme.secondary,
-                                ),
-                              ),
-                            ],
-                          ),
-                        );
-                      }).toList(),
-                    ),
-                  );
-                }).toList(),
+                children:
+                    calculator.getNameDecomposition(name).map((syllableList) {
+                      return Container(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 8,
+                          vertical: 6,
+                        ),
+                        decoration: BoxDecoration(
+                          color: Theme.of(
+                            context,
+                          ).colorScheme.secondary.withOpacity(0.1),
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children:
+                              syllableList.map((item) {
+                                return Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                    horizontal: 6,
+                                  ),
+                                  child: Column(
+                                    children: [
+                                      Text(
+                                        item['char'],
+                                        style: TextStyle(
+                                          fontSize: 14,
+                                          fontWeight: FontWeight.bold,
+                                          color:
+                                              Theme.of(
+                                                context,
+                                              ).textTheme.bodyLarge?.color,
+                                        ),
+                                      ),
+                                      const SizedBox(height: 4),
+                                      Text(
+                                        '${item['value']}',
+                                        style: TextStyle(
+                                          fontSize: 18,
+                                          fontWeight: FontWeight.w600,
+                                          color:
+                                              Theme.of(
+                                                context,
+                                              ).colorScheme.secondary,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                );
+                              }).toList(),
+                        ),
+                      );
+                    }).toList(),
               ),
             ),
-            const SizedBox(height: 24),
+            const SizedBox(height: 14),
 
             // 섹션 타이틀
             Text(
@@ -279,11 +311,6 @@ class ResultScreen extends StatelessWidget {
 
             if (birthDate != null) ...[
               const SizedBox(height: 24),
-
-
-
-
-
 
               // 개인 년수 섹션
               Text(
@@ -344,11 +371,11 @@ class ResultScreen extends StatelessWidget {
                       physics: const NeverScrollableScrollPhysics(),
                       gridDelegate:
                           const SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: 6,
-                        crossAxisSpacing: 8,
-                        mainAxisSpacing: 12,
-                        childAspectRatio: 0.8,
-                      ),
+                            crossAxisCount: 6,
+                            crossAxisSpacing: 8,
+                            mainAxisSpacing: 12,
+                            childAspectRatio: 0.8,
+                          ),
                       itemCount: 12,
                       itemBuilder: (context, index) {
                         final month = index + 1;
@@ -373,19 +400,19 @@ class ResultScreen extends StatelessWidget {
                                 width: 32,
                                 height: 32,
                                 decoration: BoxDecoration(
-                                  color: Theme.of(context)
-                                      .colorScheme
-                                      .secondary
-                                      .withOpacity(0.1),
+                                  color: Theme.of(
+                                    context,
+                                  ).colorScheme.secondary.withOpacity(0.1),
                                   borderRadius: BorderRadius.circular(8),
                                 ),
                                 child: Center(
                                   child: Text(
                                     '${monthNumbers![index]}',
                                     style: TextStyle(
-                                      color: Theme.of(context)
-                                          .colorScheme
-                                          .secondary,
+                                      color:
+                                          Theme.of(
+                                            context,
+                                          ).colorScheme.secondary,
                                       fontWeight: FontWeight.bold,
                                     ),
                                   ),

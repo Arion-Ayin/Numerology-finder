@@ -2,15 +2,20 @@ import 'package:flutter/material.dart';
 
 // 한글 자음을 숫자로 변환하는 맵
 const Map<String, int> _koreanConsonantToNumberMap = {
-  'ㄱ': 1, 'ㄲ': 1,
+  'ㄱ': 1,
+  'ㄲ': 1,
   'ㄴ': 2,
-  'ㄷ': 3, 'ㄸ': 3,
+  'ㄷ': 3,
+  'ㄸ': 3,
   'ㄹ': 4,
   'ㅁ': 5,
-  'ㅂ': 6, 'ㅃ': 6,
-  'ㅅ': 7, 'ㅆ': 7,
+  'ㅂ': 6,
+  'ㅃ': 6,
+  'ㅅ': 7,
+  'ㅆ': 7,
   'ㅇ': 8,
-  'ㅈ': 9, 'ㅉ': 9,
+  'ㅈ': 9,
+  'ㅉ': 9,
   'ㅊ': 10,
   'ㅋ': 2,
   'ㅌ': 3,
@@ -20,42 +25,161 @@ const Map<String, int> _koreanConsonantToNumberMap = {
 
 // 한글 모음을 숫자로 변환하는 맵
 const Map<String, int> _koreanVowelToNumberMap = {
-    'ㅏ': 1, 'ㅐ': 11, 'ㅑ': 2, 'ㅒ': 12, 'ㅓ': 3, 'ㅔ': 13, 'ㅕ': 4, 'ㅖ': 14, 'ㅗ': 5, 'ㅘ': 15, 'ㅙ': 16, 'ㅚ': 17,
-    'ㅛ': 6, 'ㅜ': 7, 'ㅝ': 18, 'ㅞ': 19, 'ㅟ': 20, 'ㅠ': 8, 'ㅡ': 9, 'ㅢ': 21, 'ㅣ': 10,
+  'ㅏ': 1,
+  'ㅐ': 11,
+  'ㅑ': 2,
+  'ㅒ': 12,
+  'ㅓ': 3,
+  'ㅔ': 13,
+  'ㅕ': 4,
+  'ㅖ': 14,
+  'ㅗ': 5,
+  'ㅘ': 6,
+  'ㅙ': 16,
+  'ㅚ': 15,
+  'ㅛ': 6,
+  'ㅜ': 7,
+  'ㅝ': 10,
+  'ㅞ': 20,
+  'ㅟ': 17,
+  'ㅠ': 8,
+  'ㅡ': 9,
+  'ㅢ': 19,
+  'ㅣ': 10,
 };
 
 // 한글 음절 분해를 위한 자모 배열
-const List<String> _choseong = ['ㄱ', 'ㄲ', 'ㄴ', 'ㄷ', 'ㄸ', 'ㄹ', 'ㅁ', 'ㅂ', 'ㅃ', 'ㅅ', 'ㅆ', 'ㅇ', 'ㅈ', 'ㅉ', 'ㅊ', 'ㅋ', 'ㅌ', 'ㅍ', 'ㅎ'];
-const List<String> _jungseong = ['ㅏ', 'ㅐ', 'ㅑ', 'ㅒ', 'ㅓ', 'ㅔ', 'ㅕ', 'ㅖ', 'ㅗ', 'ㅘ', 'ㅙ', 'ㅚ', 'ㅛ', 'ㅜ', 'ㅝ', 'ㅞ', 'ㅟ', 'ㅠ', 'ㅡ', 'ㅢ', 'ㅣ'];
-const List<String> _jongseong = ['', 'ㄱ', 'ㄲ', 'ㄳ', 'ㄴ', 'ㄵ', 'ㄶ', 'ㄷ', 'ㄹ', 'ㄺ', 'ㄻ', 'ㄼ', 'ㄽ', 'ㄾ', 'ㄿ', 'ㅀ', 'ㅁ', 'ㅂ', 'ㅄ', 'ㅅ', 'ㅆ', 'ㅇ', 'ㅈ', 'ㅊ', 'ㅋ', 'ㅌ', 'ㅍ', 'ㅎ'];
+const List<String> _choseong = [
+  'ㄱ',
+  'ㄲ',
+  'ㄴ',
+  'ㄷ',
+  'ㄸ',
+  'ㄹ',
+  'ㅁ',
+  'ㅂ',
+  'ㅃ',
+  'ㅅ',
+  'ㅆ',
+  'ㅇ',
+  'ㅈ',
+  'ㅉ',
+  'ㅊ',
+  'ㅋ',
+  'ㅌ',
+  'ㅍ',
+  'ㅎ',
+];
+const List<String> _jungseong = [
+  'ㅏ',
+  'ㅐ',
+  'ㅑ',
+  'ㅒ',
+  'ㅓ',
+  'ㅔ',
+  'ㅕ',
+  'ㅖ',
+  'ㅗ',
+  'ㅘ',
+  'ㅙ',
+  'ㅚ',
+  'ㅛ',
+  'ㅜ',
+  'ㅝ',
+  'ㅞ',
+  'ㅟ',
+  'ㅠ',
+  'ㅡ',
+  'ㅢ',
+  'ㅣ',
+];
+const List<String> _jongseong = [
+  '',
+  'ㄱ',
+  'ㄲ',
+  'ㄳ',
+  'ㄴ',
+  'ㄵ',
+  'ㄶ',
+  'ㄷ',
+  'ㄹ',
+  'ㄺ',
+  'ㄻ',
+  'ㄼ',
+  'ㄽ',
+  'ㄾ',
+  'ㄿ',
+  'ㅀ',
+  'ㅁ',
+  'ㅂ',
+  'ㅄ',
+  'ㅅ',
+  'ㅆ',
+  'ㅇ',
+  'ㅈ',
+  'ㅊ',
+  'ㅋ',
+  'ㅌ',
+  'ㅍ',
+  'ㅎ',
+];
 
 // 복합 자모 분해 맵
 const Map<String, List<String>> _compositeVowels = {
-  'ㅘ': ['ㅗ', 'ㅏ'], 'ㅙ': ['ㅗ', 'ㅐ'], 'ㅚ': ['ㅗ', 'ㅣ'],
-  'ㅝ': ['ㅜ', 'ㅓ'], 'ㅞ': ['ㅜ', 'ㅔ'], 'ㅟ': ['ㅜ', 'ㅣ'],
+  'ㅐ': ['ㅏ', 'ㅣ'],
+  'ㅒ': ['ㅑ', 'ㅣ'],
+  'ㅔ': ['ㅓ', 'ㅣ'],
+  'ㅖ': ['ㅕ', 'ㅣ'],
+  'ㅘ': ['ㅗ', 'ㅏ'],
+  'ㅙ': ['ㅗ', 'ㅏ', 'ㅣ'],
+  'ㅚ': ['ㅗ', 'ㅣ'],
+  'ㅝ': ['ㅜ', 'ㅓ'],
+  'ㅞ': ['ㅜ', 'ㅓ', 'ㅣ'],
+  'ㅟ': ['ㅜ', 'ㅣ'],
   'ㅢ': ['ㅡ', 'ㅣ'],
 };
 const Map<String, List<String>> _compositeConsonants = {
-  'ㄳ': ['ㄱ', 'ㅅ'], 'ㄵ': ['ㄴ', 'ㅈ'], 'ㄶ': ['ㄴ', 'ㅎ'],
-  'ㄺ': ['ㄹ', 'ㄱ'], 'ㄻ': ['ㄹ', 'ㅁ'], 'ㄼ': ['ㄹ', 'ㅂ'],
-  'ㄽ': ['ㄹ', 'ㅅ'], 'ㄾ': ['ㄹ', 'ㅌ'], 'ㄿ': ['ㄹ', 'ㅍ'],
-  'ㅀ': ['ㄹ', 'ㅎ'], 'ㅄ': ['ㅂ', 'ㅅ'],
+  'ㄳ': ['ㄱ', 'ㅅ'],
+  'ㄵ': ['ㄴ', 'ㅈ'],
+  'ㄶ': ['ㄴ', 'ㅎ'],
+  'ㄺ': ['ㄹ', 'ㄱ'],
+  'ㄻ': ['ㄹ', 'ㅁ'],
+  'ㄼ': ['ㄹ', 'ㅂ'],
+  'ㄽ': ['ㄹ', 'ㅅ'],
+  'ㄾ': ['ㄹ', 'ㅌ'],
+  'ㄿ': ['ㄹ', 'ㅍ'],
+  'ㅀ': ['ㄹ', 'ㅎ'],
+  'ㅄ': ['ㅂ', 'ㅅ'],
 };
 
 const Map<String, int> _EnglishLetterToNumberMap = {
-  'A': 1, 'J': 10, 'S': 19,
-  'B': 2, 'K': 11, 'T': 20,
-  'C': 3, 'L': 12, 'U': 21,
-  'D': 4, 'M': 13, 'V': 22,
-  'E': 5, 'N': 14, 'W': 23,
-  'F': 6, 'O': 15, 'X': 24,
-  'G': 7, 'P': 16, 'Y': 25,
-  'H': 8, 'Q': 17, 'Z': 26,
-  'I': 9, 'R': 18,
+  'A': 1,
+  'J': 10,
+  'S': 19,
+  'B': 2,
+  'K': 11,
+  'T': 20,
+  'C': 3,
+  'L': 12,
+  'U': 21,
+  'D': 4,
+  'M': 13,
+  'V': 22,
+  'E': 5,
+  'N': 14,
+  'W': 23,
+  'F': 6,
+  'O': 15,
+  'X': 24,
+  'G': 7,
+  'P': 16,
+  'Y': 25,
+  'H': 8,
+  'Q': 17,
+  'Z': 26,
+  'I': 9,
+  'R': 18,
 };
-
-
-
 
 class NumerologyCalculator {
   // 숫자를 한 자리로 줄이는 핵심 함수 (마스터 수는 예외 처리)
@@ -88,7 +212,7 @@ class NumerologyCalculator {
     }
     return int.parse(numStr);
   }
-  
+
   // 생년월일의 각 자리를 더하는 함수
   int _sumDigits(int number) {
     int sum = 0;
@@ -139,7 +263,7 @@ class NumerologyCalculator {
     if (_koreanConsonantToNumberMap.containsKey(char)) return true;
     return false;
   }
-  
+
   // 한글 음절을 분해하여 각 자모의 숫자 값을 합산하는 헬퍼 함수
   int _getHangulSyllableValue(String syllable) {
     if (syllable.length != 1) {
@@ -165,24 +289,33 @@ class NumerologyCalculator {
     return sum;
   }
 
-
-
-
-
+  void _addDecomposedCharacter(String char, List<Map<String, dynamic>> list) {
+    if (_compositeVowels.containsKey(char)) {
+      for (String c in _compositeVowels[char]!) {
+        list.add({'char': c, 'value': _getDecomposedCharValue(c)});
+      }
+    } else if (_compositeConsonants.containsKey(char)) {
+      for (String c in _compositeConsonants[char]!) {
+        list.add({'char': c, 'value': _getDecomposedCharValue(c)});
+      }
+    } else {
+      list.add({'char': char, 'value': _getDecomposedCharValue(char)});
+    }
+  }
 
   // 한글 음절을 분해하여 각 자모의 문자 및 숫자 값을 리스트로 반환하는 함수
   List<List<Map<String, dynamic>>> getNameDecomposition(String name) {
     List<List<Map<String, dynamic>>> result = [];
-    
+
     for (int i = 0; i < name.length; i++) {
       String syllable = name[i];
       if (syllable.length != 1) continue;
-      
+
       int charCode = syllable.runes.first;
       List<Map<String, dynamic>> syllableDecomp = [];
 
       if (charCode < 0xAC00 || charCode > 0xD7A3) {
-        syllableDecomp.add({'char': syllable, 'value': _getDecomposedCharValue(syllable)});
+        _addDecomposedCharacter(syllable, syllableDecomp);
       } else {
         int base = charCode - 0xAC00;
         int jongseongIndex = base % 28;
@@ -190,14 +323,14 @@ class NumerologyCalculator {
         int choseongIndex = ((base - jongseongIndex) / 28 / 21).floor();
 
         String cho = _choseong[choseongIndex];
-        syllableDecomp.add({'char': cho, 'value': _getDecomposedCharValue(cho)});
-        
+        _addDecomposedCharacter(cho, syllableDecomp);
+
         String jung = _jungseong[jungseongIndex];
-        syllableDecomp.add({'char': jung, 'value': _getDecomposedCharValue(jung)});
-        
+        _addDecomposedCharacter(jung, syllableDecomp);
+
         if (jongseongIndex > 0) {
           String jong = _jongseong[jongseongIndex];
-          syllableDecomp.add({'char': jong, 'value': _getDecomposedCharValue(jong)});
+          _addDecomposedCharacter(jong, syllableDecomp);
         }
       }
       result.add(syllableDecomp);
@@ -223,13 +356,13 @@ class NumerologyCalculator {
     }
     return totalValue;
   }
- 
+
   // 혼의수 계산 함수 (이름의 모음 합)
   int calculateSoulUrgeNumber(String name) {
     int totalVowelValue = 0;
     for (int i = 0; i < name.length; i++) {
       String syllable = name[i];
-      
+
       if (syllable.length != 1) continue;
 
       int charCode = syllable.runes.first;
@@ -238,7 +371,7 @@ class NumerologyCalculator {
       if (charCode < 0xAC00 || charCode > 0xD7A3) {
         // 모음인지 확인하고 값 더하기
         if (_isKoreanVowel(syllable)) {
-            totalVowelValue += _getDecomposedCharValue(syllable);
+          totalVowelValue += _getDecomposedCharValue(syllable);
         }
         continue;
       }
@@ -246,14 +379,14 @@ class NumerologyCalculator {
       int base = charCode - 0xAC00;
       int jongseongIndex = base % 28;
       int jungseongIndex = ((base - jongseongIndex) / 28).floor() % 21;
-      
+
       String vowel = _jungseong[jungseongIndex];
       totalVowelValue += _getDecomposedCharValue(vowel);
     }
     return totalVowelValue;
   }
 
-    // 성격수 계산 함수 (이름의 자음 합)
+  // 성격수 계산 함수 (이름의 자음 합)
   int calculatePersonalityNumber(String name) {
     int totalConsonantValue = 0;
     for (int i = 0; i < name.length; i++) {
@@ -289,59 +422,58 @@ class NumerologyCalculator {
     return totalConsonantValue;
   }
 
-        // 완성수 계산 함수 (인생 여정 수 + 운명수)
-      int calculateMaturityNumber(int lifePathNumber, int destinyNumber) {
-        final finalLifePath = _reduceToSingleDigit(lifePathNumber);
-        final finalDestiny = _reduceToSingleDigit(destinyNumber);
-        return finalLifePath + finalDestiny;
-      }
+  // 완성수 계산 함수 (인생 여정 수 + 운명수)
+  int calculateMaturityNumber(int lifePathNumber, int destinyNumber) {
+    final finalLifePath = _reduceToSingleDigit(lifePathNumber);
+    final finalDestiny = _reduceToSingleDigit(destinyNumber);
+    return finalLifePath + finalDestiny;
+  }
 
-      // 1년수 계산 함수 (생월 + 생일 + 금년)
-      int calculatePersonalYearNumber(DateTime birthDate) {
-        final int currentYear = DateTime.now().year;
-        int initialSum = birthDate.month + birthDate.day + _sumDigits(currentYear);
-        return _reduceToSingleDigit(initialSum);
-      }
+  // 1년수 계산 함수 (생월 + 생일 + 금년)
+  int calculatePersonalYearNumber(DateTime birthDate) {
+    final int currentYear = DateTime.now().year;
+    int initialSum = birthDate.month + birthDate.day + _sumDigits(currentYear);
+    return _reduceToSingleDigit(initialSum);
+  }
 
-      // 1달수 계산 함수 (1년수 + 현재 월)
-      int calculatePersonalMonthNumber(int personalYearNumber) {
-        final int currentMonth = DateTime.now().month;
-        int initialSum = personalYearNumber + currentMonth;
-        return _reduceToSingleDigit(initialSum);
-      }
+  // 1달수 계산 함수 (1년수 + 현재 월)
+  int calculatePersonalMonthNumber(int personalYearNumber) {
+    final int currentMonth = DateTime.now().month;
+    int initialSum = personalYearNumber + currentMonth;
+    return _reduceToSingleDigit(initialSum);
+  }
 
-      // 생일수 계산 함수 (생일의 일자)
-      int calculateBirthdayNumber(DateTime birthDate) {
-        return birthDate.day;
-      }
+  // 생일수 계산 함수 (생일의 일자)
+  int calculateBirthdayNumber(DateTime birthDate) {
+    return birthDate.day;
+  }
 
-      // 12개월의 월수를 계산하는 함수
-      List<int> calculateAllPersonalMonths(DateTime birthDate) {
-        final int personalYearNumber = calculatePersonalYearNumber(birthDate);
-        // 개인 년수를 먼저 축약합니다.
-        final int reducedPersonalYear = _reduceToSingleDigit(personalYearNumber);
+  // 12개월의 월수를 계산하는 함수
+  List<int> calculateAllPersonalMonths(DateTime birthDate) {
+    final int personalYearNumber = calculatePersonalYearNumber(birthDate);
+    // 개인 년수를 먼저 축약합니다.
+    final int reducedPersonalYear = _reduceToSingleDigit(personalYearNumber);
 
-        final List<int> monthNumbers = [];
-        for (int month = 1; month <= 12; month++) {
-          int sum = reducedPersonalYear + month;
+    final List<int> monthNumbers = [];
+    for (int month = 1; month <= 12; month++) {
+      int sum = reducedPersonalYear + month;
 
-          // 수가 9보다 클 경우 (즉, 두 자리 수 이상일 경우)
-          // 한 자리가 될 때까지 각 자리수를 계속 더합니다.
-          while (sum > 9) {
-            int newSum = 0;
-            int tempNum = sum;
-            while (tempNum > 0) {
-              newSum += tempNum % 10; // 1의 자리 숫자 더하기
-              tempNum = tempNum ~/ 10; // 10의 자리 숫자를 1의 자리로 만들기
-            }
-            sum = newSum;
-          }
-
-          monthNumbers.add(sum);
+      // 수가 9보다 클 경우 (즉, 두 자리 수 이상일 경우)
+      // 한 자리가 될 때까지 각 자리수를 계속 더합니다.
+      while (sum > 9) {
+        int newSum = 0;
+        int tempNum = sum;
+        while (tempNum > 0) {
+          newSum += tempNum % 10; // 1의 자리 숫자 더하기
+          tempNum = tempNum ~/ 10; // 10의 자리 숫자를 1의 자리로 만들기
         }
-        return monthNumbers;
+        sum = newSum;
       }
 
+      monthNumbers.add(sum);
+    }
+    return monthNumbers;
+  }
 
   // 숫자의 전체 축소 경로를 반환하는 헬퍼 함수
   List<int> _getReductionPath(int number) {
