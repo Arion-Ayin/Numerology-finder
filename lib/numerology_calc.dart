@@ -12,16 +12,16 @@ const Map<String, int> _koreanConsonantToNumberMap = {
   'ㅇ': 8,
   'ㅈ': 9, 'ㅉ': 9,
   'ㅊ': 10,
-  'ㅋ': 11,
-  'ㅌ': 12,
-  'ㅍ': 13,
-  'ㅎ': 14,
+  'ㅋ': 2,
+  'ㅌ': 3,
+  'ㅍ': 4,
+  'ㅎ': 5,
 };
 
 // 한글 모음을 숫자로 변환하는 맵
 const Map<String, int> _koreanVowelToNumberMap = {
-  'ㅏ': 1, 'ㅐ': 11, 'ㅑ': 2, 'ㅒ': 12, 'ㅓ': 3, 'ㅔ': 13, 'ㅕ': 4, 'ㅖ': 14, 'ㅗ': 5, 'ㅘ': 15, 'ㅙ': 16, 'ㅚ': 17,
-  'ㅛ': 6, 'ㅜ': 7, 'ㅝ': 18, 'ㅞ': 19, 'ㅟ': 20, 'ㅠ': 8, 'ㅡ': 9, 'ㅢ': 21, 'ㅣ': 10,
+    'ㅏ': 1, 'ㅐ': 11, 'ㅑ': 2, 'ㅒ': 12, 'ㅓ': 3, 'ㅔ': 13, 'ㅕ': 4, 'ㅖ': 14, 'ㅗ': 5, 'ㅘ': 15, 'ㅙ': 16, 'ㅚ': 17,
+    'ㅛ': 6, 'ㅜ': 7, 'ㅝ': 18, 'ㅞ': 19, 'ㅟ': 20, 'ㅠ': 8, 'ㅡ': 9, 'ㅢ': 21, 'ㅣ': 10,
 };
 
 // 한글 음절 분해를 위한 자모 배열
@@ -163,6 +163,46 @@ class NumerologyCalculator {
       sum += _getDecomposedCharValue(_jongseong[jongseongIndex]);
     }
     return sum;
+  }
+
+
+
+
+
+
+  // 한글 음절을 분해하여 각 자모의 문자 및 숫자 값을 리스트로 반환하는 함수
+  List<List<Map<String, dynamic>>> getNameDecomposition(String name) {
+    List<List<Map<String, dynamic>>> result = [];
+    
+    for (int i = 0; i < name.length; i++) {
+      String syllable = name[i];
+      if (syllable.length != 1) continue;
+      
+      int charCode = syllable.runes.first;
+      List<Map<String, dynamic>> syllableDecomp = [];
+
+      if (charCode < 0xAC00 || charCode > 0xD7A3) {
+        syllableDecomp.add({'char': syllable, 'value': _getDecomposedCharValue(syllable)});
+      } else {
+        int base = charCode - 0xAC00;
+        int jongseongIndex = base % 28;
+        int jungseongIndex = ((base - jongseongIndex) / 28).floor() % 21;
+        int choseongIndex = ((base - jongseongIndex) / 28 / 21).floor();
+
+        String cho = _choseong[choseongIndex];
+        syllableDecomp.add({'char': cho, 'value': _getDecomposedCharValue(cho)});
+        
+        String jung = _jungseong[jungseongIndex];
+        syllableDecomp.add({'char': jung, 'value': _getDecomposedCharValue(jung)});
+        
+        if (jongseongIndex > 0) {
+          String jong = _jongseong[jongseongIndex];
+          syllableDecomp.add({'char': jong, 'value': _getDecomposedCharValue(jong)});
+        }
+      }
+      result.add(syllableDecomp);
+    }
+    return result;
   }
 
   // 인생 여정 수 계산 함수

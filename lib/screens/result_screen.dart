@@ -160,6 +160,77 @@ class ResultScreen extends StatelessWidget {
             ),
             const SizedBox(height: 24),
 
+            // 당신의 행운 숫자 섹션
+            Text(
+              '당신의 행운 숫자',
+              style: TextStyle(
+                color: Theme.of(context).colorScheme.secondary,
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            const SizedBox(height: 12),
+            Container(
+              width: double.infinity,
+              padding: const EdgeInsets.all(16),
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                  colors: NumerologyThemes.cardGradient(isDark),
+                ),
+                borderRadius: BorderRadius.circular(16),
+                border: Border.all(
+                  color: Theme.of(context).colorScheme.secondary.withOpacity(0.3),
+                  width: 1,
+                ),
+              ),
+              child: Wrap(
+                spacing: 12,
+                runSpacing: 12,
+                alignment: WrapAlignment.center,
+                children: calculator.getNameDecomposition(name).map((syllableList) {
+                  return Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
+                    decoration: BoxDecoration(
+                      color: Theme.of(context).colorScheme.secondary.withOpacity(0.1),
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: syllableList.map((item) {
+                        return Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 6),
+                          child: Column(
+                            children: [
+                              Text(
+                                item['char'],
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.bold,
+                                  color: Theme.of(context).textTheme.bodyLarge?.color,
+                                ),
+                              ),
+                              const SizedBox(height: 4),
+                              Text(
+                                '${item['value']}',
+                                style: TextStyle(
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w600,
+                                  color: Theme.of(context).colorScheme.secondary,
+                                ),
+                              ),
+                            ],
+                          ),
+                        );
+                      }).toList(),
+                    ),
+                  );
+                }).toList(),
+              ),
+            ),
+            const SizedBox(height: 24),
+
             // 섹션 타이틀
             Text(
               AppLocalizations.of(context)!.yourNumerologyResult,
@@ -208,6 +279,11 @@ class ResultScreen extends StatelessWidget {
 
             if (birthDate != null) ...[
               const SizedBox(height: 24),
+
+
+
+
+
 
               // 개인 년수 섹션
               Text(

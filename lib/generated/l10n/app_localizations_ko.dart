@@ -42,7 +42,7 @@ class AppLocalizationsKo extends AppLocalizations {
   String get birthDate => '생년월일';
 
   @override
-  String get yourNumerologyResult => '당신의 수비학 결과 :';
+  String get yourNumerologyResult => '당신의 수비학 결과';
 
   @override
   String get lifePathNumber => '인생여정 수';
