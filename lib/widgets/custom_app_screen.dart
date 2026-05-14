@@ -11,11 +11,7 @@ class CustomAppScreen extends StatefulWidget {
   final Widget body;
   final Future<bool> Function(BuildContext)? onWillPop;
 
-  const CustomAppScreen({
-    super.key,
-    required this.body,
-    this.onWillPop,
-  });
+  const CustomAppScreen({super.key, required this.body, this.onWillPop});
 
   @override
   State<CustomAppScreen> createState() => _CustomAppScreenState();
@@ -50,7 +46,6 @@ class _CustomAppScreenState extends State<CustomAppScreen> {
 
         // [중요!] 테스트가 끝나면 이 줄을 지우거나 주석 처리하세요.
         // debugDisplayAlways: true,
-
         debugLogging: true,
       );
 
@@ -91,26 +86,27 @@ class _CustomAppScreenState extends State<CustomAppScreen> {
     });
   }
 
-  static const List<Map<String, dynamic>> _appBarOptions = <Map<String, dynamic>>[
-    {'title': 'Numerology Calculator', 'icon': Icons.calculate},
-    {'title': 'Settings', 'icon': Icons.settings},
-    {'title': 'Info', 'icon': Icons.info_outline},
-  ];
+  static const List<Map<String, dynamic>> _appBarOptions =
+      <Map<String, dynamic>>[
+        {'title': 'Numerology Calculator', 'icon': Icons.calculate},
+        {'title': 'Settings', 'icon': Icons.settings},
+        {'title': 'Developer Notes', 'icon': Icons.article_outlined},
+      ];
 
   @override
   Widget build(BuildContext context) {
     final List<Widget> _widgetOptions = <Widget>[
       widget.body,
       const SettingScreen(),
-      const InfoScreen(),
+      const DeveloperNotesScreen(),
     ];
 
     return UpgradeAlert(
       upgrader: upgrader,
-      
+
       // [수정됨] 'Later' 버튼을 표시하지 않도록 false로 변경했습니다.
-      showLater: false, 
-      
+      showLater: false,
+
       showIgnore: true, // 'Ignore' 버튼은 계속 표시합니다.
       child: PopScope(
         canPop: false,
@@ -127,7 +123,9 @@ class _CustomAppScreenState extends State<CustomAppScreen> {
                 Container(
                   padding: const EdgeInsets.all(8),
                   decoration: BoxDecoration(
-                    color: Theme.of(context).colorScheme.secondary.withValues(alpha: 0.15),
+                    color: Theme.of(
+                      context,
+                    ).colorScheme.secondary.withValues(alpha: 0.15),
                     borderRadius: BorderRadius.circular(10),
                   ),
                   child: Icon(
@@ -210,8 +208,14 @@ class _CustomAppScreenState extends State<CustomAppScreen> {
               backgroundColor: Colors.transparent,
               elevation: 0,
               selectedItemColor: Theme.of(context).colorScheme.secondary,
-              unselectedItemColor: Theme.of(context).bottomNavigationBarTheme.unselectedItemColor,
-              selectedLabelStyle: const TextStyle(fontWeight: FontWeight.w600, fontSize: 12),
+              unselectedItemColor:
+                  Theme.of(
+                    context,
+                  ).bottomNavigationBarTheme.unselectedItemColor,
+              selectedLabelStyle: const TextStyle(
+                fontWeight: FontWeight.w600,
+                fontSize: 12,
+              ),
               unselectedLabelStyle: const TextStyle(fontSize: 12),
               type: BottomNavigationBarType.fixed,
             ),
@@ -266,7 +270,7 @@ class AppUpgraderMessages extends UpgraderMessages {
   @override
   String get buttonTitleIgnore {
     if (languageCode == 'ko') {
-      return '이 버전 무시'; 
+      return '이 버전 무시';
     }
     // 기본값 (영어)
     return 'Ignore';

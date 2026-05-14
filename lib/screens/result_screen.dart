@@ -211,7 +211,7 @@ class ResultScreen extends StatelessWidget {
 
             // 당신의 행운 숫자 섹션
             Text(
-              '당신의 행운 숫자',
+              languageCode == 'ko' ? '당신의 행운 숫자' : 'Your Lucky Numbers',
               style: TextStyle(
                 color: Theme.of(context).colorScheme.secondary,
                 fontSize: 20,
@@ -346,7 +346,7 @@ class ResultScreen extends StatelessWidget {
             if (birthDate != null && pinnacleChallengeList != null) ...[
               const SizedBox(height: 24),
               Text(
-                languageCode == 'ko' ? '절정수 및 도전수' : 'Pinnacles & Challenges',
+                languageCode == 'ko' ? '절정수 & 도전수' : 'Pinnacles & Challenges',
                 style: TextStyle(
                   color: Theme.of(context).colorScheme.secondary,
                   fontSize: 20,

@@ -511,9 +511,18 @@ class NumerologyCalculator {
 
   // 연령진동수 계산 함수
   int calculateAgeVibrationNumber(DateTime birthDate) {
-    final int currentYear = DateTime.now().year;
-    int age = currentYear - birthDate.year; // 만나이 기준 연도 차이
-    int sumAge = age + (age - 1); // 생일 기준 앞뒤 나이 합
+    final DateTime now = DateTime.now();
+    int currentAge = now.year - birthDate.year;
+
+    // 생일이 지나지 않았으면 만 나이는 1살 적음
+    if (now.month < birthDate.month ||
+        (now.month == birthDate.month && now.day < birthDate.day)) {
+      currentAge--;
+    }
+
+    // 연령진동수: 현재 만 나이 + 다음 만 나이
+    int sumAge = currentAge + (currentAge + 1);
+
     return _reduceToSingleDigit(sumAge); // 단일 숫자로 축약
   }
 
